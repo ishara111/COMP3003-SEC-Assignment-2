@@ -2,6 +2,8 @@ package edu.curtin.sec.assignment2;
 import edu.curtin.terminalgrid.TerminalGrid;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -11,23 +13,25 @@ import java.util.regex.Pattern;
  */
 public class App
 {
+    public static Locale locale = Locale.getDefault();
+    public ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
+    public LocalDate currentDate = LocalDate.now();
 
     public static void main(String[] args) {
 
         //terminalgrid();
         checkInputFIle(args);
 
-        Locale locale = Locale.getDefault();
-
-        ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
+        App app = new App();
 
         Scanner scanner = new Scanner(System.in);
 
-        DisplayCalendar calendar = new DisplayCalendar(locale,bundle);
+        DisplayCalendar calendar = new DisplayCalendar(app);
 
-        Menu menu = new Menu(locale,bundle,scanner,calendar);
+        Menu menu = new Menu(app,scanner,calendar);
 
         menu.controlMenu();
+
     }
     private static void checkInputFIle(String[] args)
     {

@@ -1,23 +1,22 @@
 package edu.curtin.sec.assignment2;
 
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Menu {
-    private Locale locale;
-    private ResourceBundle bundle;
     private String option;
     private Scanner scanner;
     private DisplayCalendar calendar;
+    private static App app;
 
-    public Menu(Locale locale, ResourceBundle bundle,Scanner scanner,DisplayCalendar calendar) {
-        this.locale = locale;
-        this.bundle = bundle;
+    public Menu(App app,Scanner scanner,DisplayCalendar calendar) {
         this.option = "";
         this.scanner = new Scanner(System.in);
         this.calendar = calendar;
+        Menu.app = app;
     }
 
     public void controlMenu()
@@ -26,7 +25,7 @@ public class Menu {
             calendar.printCalendar();
             System.out.println();
             System.out.println();
-            System.out.println(bundle.getString("menu-prompt"));
+            System.out.println(app.bundle.getString("menu-prompt"));
             System.out.println();
             option = scanner.nextLine();
             System.out.println();
@@ -34,39 +33,39 @@ public class Menu {
             switch (option) {
                 case "+d":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.plusDays(1);
                     break;
                 case "+w":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.plusWeeks(1);
                     break;
                 case "+m":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.plusMonths(1);
                     break;
                 case "+y":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.plusYears(1);
                     break;
                 case "-d":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.minusDays(1);
                     break;
                 case "-w":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.minusWeeks(1);
                     break;
                 case "-m":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.minusMonths(1);
                     break;
                 case "-y":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = app.currentDate.minusYears(1);
                     break;
                 case "t":
                     System.out.print("\033[H\033[2J");
-
+                    app.currentDate = LocalDate.now();
                     break;
                 case "search":
                     System.out.print("\033[H\033[2J");
@@ -110,7 +109,7 @@ public class Menu {
         boolean stop = false;
         while (!stop) {
             System.out.println();
-            System.out.println(bundle.getString("locale-menu-prompt"));
+            System.out.println(app.bundle.getString("locale-menu-prompt"));
             String input = scanner.nextLine();
 
             Pattern pattern = Pattern.compile("^[a-z]{2}-[A-Z]{2}$");
@@ -120,36 +119,40 @@ public class Menu {
             if (matcher.matches()) {
                 switch (input) {
                     case "en-AU":
-                        locale = Locale.forLanguageTag("en-AU");
-                        bundle = ResourceBundle.getBundle("bundle", locale);
+                        app.locale = Locale.forLanguageTag("en-AU");
+                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
                         stop=true;
-                        System.out.println("Selected English (Australia) Locale");
+                        System.out.println("\nSelected English (Australia) Locale");
+                        System.out.print("\033[H\033[2J");
                         break;
                     case "si-LK":
-                        locale = Locale.forLanguageTag("si-LK");
-                        bundle = ResourceBundle.getBundle("bundle", locale);
+                        app.locale = Locale.forLanguageTag("si-LK");
+                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
                         stop=true;
-                        System.out.println("Selected Sinhalese (Sri Lanka) Locale");
+                        System.out.println("\nSelected Sinhalese (Sri Lanka) Locale");
+                        System.out.print("\033[H\033[2J");
                         break;
                     case "de-DE":
-                        locale = Locale.forLanguageTag("de-DE");
-                        bundle = ResourceBundle.getBundle("bundle", locale);
+                        app.locale = Locale.forLanguageTag("de-DE");
+                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
                         stop=true;
-                        System.out.println("Selected German (Germany) Locale");
+                        System.out.println("\nSelected German (Germany) Locale");
+                        System.out.print("\033[H\033[2J");
                         break;
 
                     default:
-                        locale = Locale.forLanguageTag(input);
-                        bundle = ResourceBundle.getBundle("bundle", Locale.getDefault());
+                        app.locale = Locale.forLanguageTag(input);
+                        app.bundle = ResourceBundle.getBundle("bundle", Locale.getDefault());
                         stop=true;
-                        System.out.println("Selected "+input+" Locale");
+                        System.out.println("\nSelected "+input+" Locale");
+                        System.out.print("\033[H\033[2J");
                         break;
                 }
 
             } else {
                 System.out.println();
-                System.out.println("Input is not in the correct format or does not have an uppercase country code.");
-                System.out.println();
+                System.out.println("\u001B[31mInput is not in the correct format or does not have an uppercase " +
+                        "country code.\u001B[0m");
             }
 
         }
