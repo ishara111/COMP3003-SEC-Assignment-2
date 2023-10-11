@@ -9,8 +9,73 @@ import java.util.*;
  */
 public class App
 {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
+
+        //System.out.println(args[0]);
+
+        Scanner scanner = new Scanner(System.in);
+        String input;
+
+        while (true) {
+            System.out.println("Enter an option (+d, +w, +m, +y, -d, -w, -m, -y, t, or quit): ");
+            System.out.println();
+            input = scanner.nextLine();
+            System.out.println();
+
+            switch (input) {
+                case "+d":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "+w":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "+m":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "+y":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "-d":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "-w":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "-m":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "-y":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "t":
+                    System.out.print("\033[H\033[2J");
+
+                    break;
+                case "quit":
+                    System.out.print("\033[H\033[2J");
+                    System.out.println("Exiting program.");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.print("\033[H\033[2J");
+                    System.out.println("Invalid option. Please enter a valid option.");
+                    System.out.println();
+                    break;
+
+            }
+        }
+    }
+
+
+    public void terminalgrid(){
         // Demonstration data
         String[][] messages = {{"one two three",     "four five six",             "seven eight nine"},
                 {"ten eleven twelve", "thirteen fourteen fifteen", "sixteen seventeen eighteen"}};
