@@ -3,6 +3,7 @@ import edu.curtin.terminalgrid.TerminalGrid;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * This illustrates different ways to use TerminalGrid. You may not feel you _need_ all the
@@ -10,120 +11,23 @@ import java.util.*;
  */
 public class App
 {
+
     public static void main(String[] args) {
 
         //terminalgrid();
         checkInputFIle(args);
 
+        Locale locale = Locale.getDefault();
+
+        ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
+
         Scanner scanner = new Scanner(System.in);
-        String option;
 
-        while (true) {
-            printCalendar();
-            System.out.println();
-            System.out.println();
-            System.out.println("Enter an option (+d, +w, +m, +y, -d, -w, -m, -y, t, search, quit or help): ");
-            System.out.println();
-            option = scanner.nextLine();
-            System.out.println();
+        DisplayCalendar calendar = new DisplayCalendar(locale,bundle);
 
-            switch (option) {
-                case "+d":
-                    System.out.print("\033[H\033[2J");
+        Menu menu = new Menu(locale,bundle,scanner,calendar);
 
-                    break;
-                case "+w":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "+m":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "+y":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "-d":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "-w":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "-m":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "-y":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "t":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "search":
-                    System.out.print("\033[H\033[2J");
-
-                    break;
-                case "quit":
-                    System.out.print("\033[H\033[2J");
-                    System.out.println("Exiting program.");
-                    scanner.close();
-                    System.exit(0);
-                case "help":
-                    System.out.println("\"+d\" to go forward (later) 1 day;");
-                    System.out.println("\"+w\" to go forward 1 week;");
-                    System.out.println("\"+m\" to go forward 1 month;");
-                    System.out.println("\"+y\" to go forward 1 year;");
-                    System.out.println("\"-d\" to go back (earlier) 1 day;");
-                    System.out.println("\"-w\" to go back 1 week;");
-                    System.out.println("\"-m\" to go back 1 month;");
-                    System.out.println("\"-y\" to go back 1 year;");
-                    System.out.println("\"t\" to return to today.");
-                    System.out.println("\"search\" to search for events.");
-                    System.out.println("\"quit\" to exit the program.");
-                    System.out.println();
-                    System.out.println();
-                    break;
-                default:
-                    System.out.print("\033[H\033[2J");
-                    System.out.println("\u001B[31mInvalid option. Please enter a valid option.\u001B[0m");
-                    System.out.println();
-                    break;
-
-            }
-        }
-    }
-
-    private static void printCalendar(){
-        String[][] messages = {{"one two three",     "four five six",             "seven eight nine"},
-                {"ten eleven twelve", "thirteen fourteen fifteen", "sixteen seventeen eighteen"}};
-
-        String[] rowHeadings = {"row 1", "row 2"};
-        String[] colHeadings = {"column A", "column B", "column C"};
-
-        var terminalGrid = TerminalGrid.create();
-        // With headings
-        System.out.println("With headings");
-        terminalGrid.print(messages, rowHeadings, colHeadings);
-        System.out.println();
-
-
-        System.out.println("Using nested lists rather than arrays");
-        var listMessages = new ArrayList<List<String>>();
-        var row1 = new ArrayList<String>();
-        var row2 = new ArrayList<String>();
-        row1.add("one");
-        row1.add("two");
-        row2.add("three");
-        row2.add("four");
-        listMessages.add(row1);
-        listMessages.add(row2);
-        terminalGrid.print(listMessages, List.of("row 1", "row 2"), List.of("col A", "col B"));
-        System.out.println();
+        menu.controlMenu();
     }
     private static void checkInputFIle(String[] args)
     {
