@@ -27,7 +27,7 @@ public class App
 
         App app = new App();
 
-        app.loadEvents();
+        app.loadEvents(app);
 
         Scanner scanner = new Scanner(System.in);
 
@@ -38,11 +38,11 @@ public class App
         menu.controlMenu();
 
     }
-    private void loadEvents()
+    private void loadEvents(App app)
     {
-        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15),10));
-        events.add(new Event("test 3",currentDate.plusDays(3),LocalTime.of(8, 15),12));
-        events.add(new Event("test 3",currentDate.plusWeeks(1)));
+        events.add(new Event(app,"test 1",currentDate, LocalTime.of(18, 15),10));
+        events.add(new Event(app,"test 3",currentDate.plusDays(3),LocalTime.of(8, 15),12));
+        events.add(new Event(app,"test 3",currentDate.plusWeeks(1)));
     }
     private static void checkInputFIle(String[] args)
     {

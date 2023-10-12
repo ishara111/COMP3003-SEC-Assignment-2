@@ -92,7 +92,7 @@ public class DisplayCalendar {
             }
             System.out.println();
             System.out.println();
-            System.out.println(app.bundle.getString("no-rows"));
+            System.out.println("                            "+app.bundle.getString("no-rows"));
             System.out.println();
         }
     }
