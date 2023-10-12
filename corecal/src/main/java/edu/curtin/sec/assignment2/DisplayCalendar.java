@@ -80,10 +80,21 @@ public class DisplayCalendar {
         }
 
         // put the next 7 days as columns then may be put dummy events to get the times and remove useless times
-
-        var terminalGrid = TerminalGrid.create();
-        terminalGrid.print(eventMsgs, times, dates);
-        System.out.println();
+        if(!times.isEmpty())
+        {
+            var terminalGrid = TerminalGrid.create();
+            terminalGrid.print(eventMsgs, times, dates);
+            System.out.println();
+        }
+        else{
+            for (String date : dates) {
+                System.out.print("|  "+ date + "  |");
+            }
+            System.out.println();
+            System.out.println();
+            System.out.println(app.bundle.getString("no-rows"));
+            System.out.println();
+        }
     }
     private boolean hasAllDayEventForSevenDays(List<String> dates)
     {
