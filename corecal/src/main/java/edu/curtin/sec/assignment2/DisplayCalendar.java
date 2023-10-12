@@ -14,10 +14,11 @@ import java.util.ResourceBundle;
 
 public class DisplayCalendar {
     private App app;
-    private List<Event> events = new ArrayList<>();
+    private List<Event> events;
 
     public DisplayCalendar(App app) {
         this.app = app;
+        this.events = app.events;
     }
 
     public void printCalendar(){
@@ -25,9 +26,6 @@ public class DisplayCalendar {
         var dates = new ArrayList<String>();
         var times = new ArrayList<String>();
 
-
-        events.add(new Event(app.currentDate,LocalTime.of(18, 15),12));
-        events.add(new Event(app.currentDate.plusDays(3),LocalTime.of(8, 15),12));
 //        events.add(new Event());
 //        events.add(new Event());
 
@@ -37,7 +35,9 @@ public class DisplayCalendar {
             dates.add(dtf.format(app.currentDate.plusDays(i)));
         }
 
-        times.add("All-Day");
+        if(hasAllDayEventForSevenDays(dates)){
+            times.add("All-Day");
+        }
 
         LocalTime startTime = LocalTime.of(0, 0); // Start at 12 AM
         LocalTime endTime = LocalTime.of(23, 59); // Ending time (11:59 PM)
@@ -48,7 +48,11 @@ public class DisplayCalendar {
         boolean stop = false;
         while (!stop) {
             LocalTime nextHour = startTime.plusHours(1);
-            times.add(startTime.format(timeFormatter) + " - " + nextHour.format(timeFormatter));
+            String rowText = startTime.format(timeFormatter) + " - " + nextHour.format(timeFormatter);
+            if(hasEventForSevenDays(rowText,dates))
+            {
+                times.add(rowText);
+            }
             if(startTime==stopTime)
             {
                 stop = true;
@@ -62,14 +66,14 @@ public class DisplayCalendar {
             List<String> row = new ArrayList<>();
             for (int j = 0; j < 7; j++) {
                 //Event event  = new Event();
-                System.out.println(times.get(i)+"       "+dates.get(j));
-                if(hasEvent(times.get(i), dates.get(j)))
-                {
-                    row.add(getEvent(times.get(i),dates.get(j)));
-                }
-                else {
-                    row.add("");
-                }
+                row.add(getEvent(times.get(i),dates.get(j)));
+//                if(hasEvent(times.get(i), dates.get(j)))
+//                {
+//                    row.add(getEvent(times.get(i),dates.get(j)));
+//                }
+//                else {
+//                    row.add("");
+//                }
 
             }
             eventMsgs.add(row);
@@ -81,7 +85,40 @@ public class DisplayCalendar {
         terminalGrid.print(eventMsgs, times, dates);
         System.out.println();
     }
+    private boolean hasAllDayEventForSevenDays(List<String> dates)
+    {
+        for (String date:dates) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
+            for (Event event:events) {
 
+                if (event.isAllDay() && dtf.format(event.getStartDate()).equals(date))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean hasEventForSevenDays(String time,List<String> dates)
+    {
+        for (String date:dates) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
+            for (Event event:events) {
+                if(!event.isAllDay())
+                {
+                    LocalTime nextHour = event.getStartTime().plusHours(1);
+                    String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
+
+                    if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
     private boolean hasEvent(String time,String date)
     {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
@@ -103,12 +140,21 @@ public class DisplayCalendar {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
         for (Event event:events) {
-            LocalTime nextHour = event.getStartTime().plusHours(1);
-            String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
-
-            if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date))
+            if(!event.isAllDay())
             {
-                return event.getText();
+                LocalTime nextHour = event.getStartTime().plusHours(1);
+                String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
+
+                if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date))
+                {
+                    return event.getText();
+                }
+            }
+            else {
+                if (dtf.format(event.getStartDate()).equals(date))
+                {
+                    return event.getText();
+                }
             }
         }
         return "";

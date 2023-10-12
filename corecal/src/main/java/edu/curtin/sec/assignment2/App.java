@@ -4,6 +4,7 @@ import edu.curtin.terminalgrid.TerminalGrid;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -17,12 +18,16 @@ public class App
     public ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
     public LocalDate currentDate = LocalDate.now();
 
+    public List<Event> events = new ArrayList<>();
+
     public static void main(String[] args) {
 
         //terminalgrid();
         checkInputFIle(args);
 
         App app = new App();
+
+        app.loadEvents();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -32,6 +37,12 @@ public class App
 
         menu.controlMenu();
 
+    }
+    private void loadEvents()
+    {
+        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15),10));
+        events.add(new Event("test 3",currentDate.plusDays(3),LocalTime.of(8, 15),12));
+        events.add(new Event("test 3",currentDate.plusWeeks(1)));
     }
     private static void checkInputFIle(String[] args)
     {
