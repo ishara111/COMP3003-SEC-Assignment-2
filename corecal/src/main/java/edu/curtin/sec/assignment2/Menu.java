@@ -73,7 +73,7 @@ public class Menu {
                     break;
                 case "quit":
                     System.out.print("\033[H\033[2J");
-                    System.out.println("Exiting program.");
+                    System.out.println(app.bundle.getString("exit-program"));
                     scanner.close();
                     System.exit(0);
                 case "locale":
@@ -96,7 +96,7 @@ public class Menu {
                     break;
                 default:
                     System.out.print("\033[H\033[2J");
-                    System.out.println("\u001B[31mInvalid option. Please enter a valid option.\u001B[0m");
+                    System.out.println(app.bundle.getString("invalid-option"));
                     System.out.println();
                     break;
 
@@ -151,8 +151,7 @@ public class Menu {
 
             } else {
                 System.out.println();
-                System.out.println("\u001B[31mInput is not in the correct format or does not have an uppercase " +
-                        "country code.\u001B[0m");
+                System.out.println(app.bundle.getString("invalid-locale"));
             }
 
         }
