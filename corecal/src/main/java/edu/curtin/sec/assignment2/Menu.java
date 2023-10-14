@@ -80,17 +80,7 @@ public class Menu {
                     changeLocale();
                     break;
                 case "help":
-                    System.out.println("\"+d\" to go forward (later) 1 day;");
-                    System.out.println("\"+w\" to go forward 1 week;");
-                    System.out.println("\"+m\" to go forward 1 month;");
-                    System.out.println("\"+y\" to go forward 1 year;");
-                    System.out.println("\"-d\" to go back (earlier) 1 day;");
-                    System.out.println("\"-w\" to go back 1 week;");
-                    System.out.println("\"-m\" to go back 1 month;");
-                    System.out.println("\"-y\" to go back 1 year;");
-                    System.out.println("\"t\" to return to today.");
-                    System.out.println("\"search\" to search for events.");
-                    System.out.println("\"quit\" to exit the program.");
+                    System.out.println(app.bundle.getString("usage"));
                     System.out.println();
                     System.out.println();
                     break;
@@ -118,25 +108,25 @@ public class Menu {
 
             if (matcher.matches()) {
                 switch (input) {
-                    case "en-AU":
-                        app.locale = Locale.forLanguageTag("en-AU");
-                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
-                        stop=true;
-                        System.out.println("\nSelected English (Australia) Locale");
-                        System.out.print("\033[H\033[2J");
-                        break;
-                    case "si-LK":
-                        app.locale = Locale.forLanguageTag("si-LK");
-                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
-                        stop=true;
-                        System.out.println("\nSelected Sinhalese (Sri Lanka) Locale");
-                        System.out.print("\033[H\033[2J");
-                        break;
+//                    case "en-AU":
+//                        app.locale = Locale.forLanguageTag("en-AU");
+//                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
+//                        stop=true;
+//                        System.out.println("\nSelected English (Australia) Locale");
+//                        System.out.print("\033[H\033[2J");
+//                        break;
+//                    case "si-LK":
+//                        app.locale = Locale.forLanguageTag("si-LK");
+//                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
+//                        stop=true;
+//                        System.out.println("\nSelected Sinhalese (Sri Lanka) Locale");
+//                        System.out.print("\033[H\033[2J");
+//                        break;
                     case "de-DE":
                         app.locale = Locale.forLanguageTag("de-DE");
                         app.bundle = ResourceBundle.getBundle("bundle", app.locale);
                         stop=true;
-                        System.out.println("\nSelected German (Germany) Locale");
+                        System.out.println(app.bundle.getString("selected-germany"));
                         System.out.print("\033[H\033[2J");
                         break;
 
@@ -144,7 +134,7 @@ public class Menu {
                         app.locale = Locale.forLanguageTag(input);
                         app.bundle = ResourceBundle.getBundle("bundle", Locale.getDefault());
                         stop=true;
-                        System.out.println("\nSelected "+input+" Locale");
+                        System.out.println(app.bundle.getString("selected-locale"));
                         System.out.print("\033[H\033[2J");
                         break;
                 }

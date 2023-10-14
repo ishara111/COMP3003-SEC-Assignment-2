@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class App
 {
-    public static Locale locale = Locale.getDefault();
+    public Locale locale = Locale.getDefault();
     public ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
     public LocalDate currentDate = LocalDate.now();
 
@@ -27,7 +27,7 @@ public class App
 
         App app = new App();
 
-        app.loadEvents(app);
+        app.loadEvents();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -38,11 +38,11 @@ public class App
         menu.controlMenu();
 
     }
-    private void loadEvents(App app)
+    private void loadEvents()
     {
-        events.add(new Event(app,"test 1",currentDate, LocalTime.of(18, 15),10));
-        events.add(new Event(app,"test 3",currentDate.plusDays(3),LocalTime.of(8, 15),12));
-        events.add(new Event(app,"test 3",currentDate.plusWeeks(1)));
+        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15),10));
+        events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
+        events.add(new Event("test 3",currentDate.plusWeeks(1)));
     }
     private static void checkInputFIle(String[] args)
     {

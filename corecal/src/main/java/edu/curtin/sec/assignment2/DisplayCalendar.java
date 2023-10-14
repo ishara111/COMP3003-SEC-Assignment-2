@@ -65,21 +65,15 @@ public class DisplayCalendar {
         for (int i = 0; i < times.size(); i++) {
             List<String> row = new ArrayList<>();
             for (int j = 0; j < 7; j++) {
-                //Event event  = new Event();
+
                 row.add(getEvent(times.get(i),dates.get(j)));
-//                if(hasEvent(times.get(i), dates.get(j)))
-//                {
-//                    row.add(getEvent(times.get(i),dates.get(j)));
-//                }
-//                else {
-//                    row.add("");
-//                }
 
             }
             eventMsgs.add(row);
         }
 
-        // put the next 7 days as columns then may be put dummy events to get the times and remove useless times
+        resetEvents(); //sets added to false again
+
         if(!times.isEmpty())
         {
             var terminalGrid = TerminalGrid.create();
@@ -130,23 +124,14 @@ public class DisplayCalendar {
         }
         return false;
     }
-    private boolean hasEvent(String time,String date)
+    private void resetEvents()
     {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
         for (Event event:events) {
-            LocalTime nextHour = event.getStartTime().plusHours(1);
-            String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
-
-            if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date))
-            {
-                return true;
-            }
+            event.setAdded(false);
         }
-        return false;
     }
 
-    private String getEvent(String time,String date)
+    private String getEvent(String time,String date)   //  SHOWS BOTH FOR ALLDAY AND TIME BOTH FIX BUG
     {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
@@ -156,14 +141,17 @@ public class DisplayCalendar {
                 LocalTime nextHour = event.getStartTime().plusHours(1);
                 String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
 
-                if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date))
+                if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date) && !event.isAdded())
                 {
+                    event.setAdded(true);
+                    event.createText(app.locale);
                     return event.getText();
                 }
             }
             else {
-                if (dtf.format(event.getStartDate()).equals(date))
+                if (dtf.format(event.getStartDate()).equals(date) && !event.isAdded())
                 {
+                    event.setAdded(true);
                     return event.getText();
                 }
             }
