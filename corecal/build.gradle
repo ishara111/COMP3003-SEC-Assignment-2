@@ -25,6 +25,8 @@ dependencies {
     // This dependency is used by the application.
     //implementation 'com.google.guava:guava:31.1-jre'
     implementation project(':terminalgrid')
+    implementation project(':api')
+    runtimeOnly project(':repeat')
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -48,7 +50,7 @@ pmd {
     toolVersion = '6.55.0'
     rulesMinimumPriority = 5
     ruleSets = []
-    ruleSetFiles = files('saed-pmd-rules.xml')
+    ruleSetFiles = files('../saed-pmd-rules.xml')
 }
 
 //tasks.named('test') {

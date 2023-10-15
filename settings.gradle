@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'Assignment-2'
-include ':terminalgrid', ':corecal'
+include ':api', ':notify', ':repeat', ':terminalgrid', ':corecal'

@@ -1,5 +1,6 @@
 package edu.curtin.sec.assignment2;
 import edu.curtin.terminalgrid.TerminalGrid;
+import edu.curtin.sec.api.*;
 
 import java.io.*;
 import java.nio.charset.CharacterCodingException;
@@ -24,21 +25,55 @@ public class App
 
     public static void main(String[] args) {
 
-        checkInputFIle(args);
-
-        readFile(args);
-
+//        checkInputFIle(args);
+//
+//        readFile(args);
+//
         App app = new App();
 
-        app.loadEvents();
+        app.run(args);
+//
+//        app.loadEvents();
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        DisplayCalendar calendar = new DisplayCalendar(app);
+//
+//        Menu menu = new Menu(app,scanner,calendar);
+//
+//        menu.controlMenu();
 
-        Scanner scanner = new Scanner(System.in);
 
-        DisplayCalendar calendar = new DisplayCalendar(app);
+    }
+    String info = "";
+    public String getInfo(){
+        return info;
+    }
+    public void run(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter something");
+         info = sc.nextLine();
 
-        Menu menu = new Menu(app,scanner,calendar);
+        var plugins  = new ArrayList<AppPlugin>();
 
-        menu.controlMenu();
+        for (String arg : args)
+        {
+            try
+            {
+                Class<?> pluginClass = Class.forName(arg);
+                plugins.add((AppPlugin) pluginClass.getConstructor().newInstance());
+            }
+            catch(ReflectiveOperationException | ClassCastException e)
+            {
+                System.out.println(e.getClass().getName()+" : "+e.getMessage());
+            }
+        }
+        ApiImpl apiImpl = new ApiImpl(this);
+        for (AppPlugin plugin: plugins)
+        {
+            plugin.startPlugin(apiImpl);
+        }
 
     }
     private void loadEvents()
