@@ -24,6 +24,11 @@ public class Plugin {
         this.startDate = startDate;
     }
 
+    public Plugin(String className, String title) {
+        this.className = className;
+        this.title = title;
+    }
+
     public String getClassName() {
         return className;
     }

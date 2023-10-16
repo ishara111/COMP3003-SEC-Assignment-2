@@ -124,6 +124,7 @@ public class DisplayCalendar {
     {
         for (Event event:events) {
             event.setAdded(false);
+            //event.setNotified(false);
         }
     }
 

@@ -27,6 +27,7 @@ dependencies {
     implementation project(':terminalgrid')
     implementation project(':api')
     runtimeOnly project(':repeat')
+    runtimeOnly project(':notify')
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

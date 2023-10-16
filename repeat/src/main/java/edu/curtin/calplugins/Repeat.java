@@ -3,7 +3,8 @@ package edu.curtin.calplugins;
 import edu.curtin.sec.api.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 
 public class Repeat implements AppPlugin{
     @Override
@@ -25,6 +26,11 @@ public class Repeat implements AppPlugin{
         else {
             api.createEvent(api.getPluginTitle(),api.getPluginStartDate());
         }
+
+    }
+
+    @Override
+    public void notifyPlugin(AppPluginAPI api, Map<String, List<String>> data) {
 
     }
 }

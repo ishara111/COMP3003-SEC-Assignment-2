@@ -6,6 +6,9 @@ import edu.curtin.sec.assignment2.models.Plugin;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class ApiImpl implements AppPluginAPI {
     private App app;
@@ -40,9 +43,9 @@ public class ApiImpl implements AppPluginAPI {
     public void createEvent(String title, LocalDate startDate, LocalTime startTime, int duration) {
         app.events.add(new Event(title,startDate,startTime,duration));
     }
-
     @Override
     public void createEvent(String title, LocalDate startDate) {
         app.events.add(new Event(title,startDate));
     }
+
 }

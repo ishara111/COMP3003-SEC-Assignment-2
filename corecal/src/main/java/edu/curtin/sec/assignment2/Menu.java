@@ -24,6 +24,7 @@ public class Menu {
         while (true) {
             calendar.printCalendar();
             System.out.println();
+            app.notifyPlugins();
             System.out.println();
             System.out.println(app.bundle.getString("menu-prompt"));
             System.out.println();
