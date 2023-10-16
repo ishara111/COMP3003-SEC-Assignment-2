@@ -1,16 +1,12 @@
 package edu.curtin.sec.assignment2;
 
+import edu.curtin.sec.assignment2.models.Event;
 import edu.curtin.terminalgrid.TerminalGrid;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class DisplayCalendar {
     private App app;

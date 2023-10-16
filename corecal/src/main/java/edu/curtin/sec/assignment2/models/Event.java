@@ -1,4 +1,4 @@
-package edu.curtin.sec.assignment2;
+package edu.curtin.sec.assignment2.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

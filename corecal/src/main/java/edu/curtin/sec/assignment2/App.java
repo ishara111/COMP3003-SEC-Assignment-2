@@ -1,14 +1,13 @@
 package edu.curtin.sec.assignment2;
-import edu.curtin.terminalgrid.TerminalGrid;
+import edu.curtin.sec.assignment2.models.Event;
 import edu.curtin.sec.api.*;
+import edu.curtin.sec.assignment2.models.Plugin;
 
 import java.io.*;
 import java.nio.charset.CharacterCodingException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * This illustrates different ways to use TerminalGrid. You may not feel you _need_ all the
@@ -21,66 +20,66 @@ public class App
     public LocalDate currentDate = LocalDate.now();
 
     public List<Event> events = new ArrayList<>();
+    public List<Plugin> plugins  = new ArrayList<>();
     public static StringBuilder dslContent = new StringBuilder();
 
     public static void main(String[] args) {
 
-//        checkInputFIle(args);
-//
-//        readFile(args);
-//
+        checkInputFIle(args);
+
+        readFile(args);
+
         App app = new App();
 
-        app.run(args);
-//
-//        app.loadEvents();
-//
-//        Scanner scanner = new Scanner(System.in);
-//
-//        DisplayCalendar calendar = new DisplayCalendar(app);
-//
-//        Menu menu = new Menu(app,scanner,calendar);
-//
-//        menu.controlMenu();
+        app.loadTestStuff();
+
+        app.loadPlugins();
+
+        Scanner scanner = new Scanner(System.in);
+
+        DisplayCalendar calendar = new DisplayCalendar(app);
+
+        Menu menu = new Menu(app,scanner,calendar);
+
+        menu.controlMenu();
 
 
     }
-    String info = "";
-    public String getInfo(){
-        return info;
-    }
-    public void run(String[] args)
+
+    public void loadPlugins()
     {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("enter something");
-         info = sc.nextLine();
+        AppPlugin appPlugin = null;
 
-        var plugins  = new ArrayList<AppPlugin>();
-
-        for (String arg : args)
-        {
+        for (Plugin plugin: plugins) {
             try
             {
-                Class<?> pluginClass = Class.forName(arg);
-                plugins.add((AppPlugin) pluginClass.getConstructor().newInstance());
+                Class<?> pluginClass = Class.forName(plugin.getClassName());
+                appPlugin = (AppPlugin) pluginClass.getConstructor().newInstance();
+
+                ApiImpl apiImpl = new ApiImpl(this,plugin);
+
+                appPlugin.startPlugin(apiImpl);
             }
             catch(ReflectiveOperationException | ClassCastException e)
             {
                 System.out.println(e.getClass().getName()+" : "+e.getMessage());
+                System.out.println("plugin ignored");
             }
-        }
-        ApiImpl apiImpl = new ApiImpl(this);
-        for (AppPlugin plugin: plugins)
-        {
-            plugin.startPlugin(apiImpl);
+
         }
 
+
+
     }
-    private void loadEvents()
+    private void loadTestStuff()
     {
-        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15),10));
+        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15,20),10));
         events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
         events.add(new Event("test 3",currentDate.plusWeeks(1)));
+
+        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin test 4",currentDate.plusDays(5),LocalTime.of(8, 15,32),2));
+        plugins.add(new Plugin("edu.curtin.calplugins.test","plugin allday",currentDate.plusDays(5)));
+        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin allday",currentDate.plusDays(5)));
     }
 
     private static void readFile(String[] args)
