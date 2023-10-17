@@ -92,7 +92,7 @@ public class App
     }
     private void loadTestStuff()
     {
-        //events.add(new Event("test 1",currentDate, LocalTime.of(18, 15,20),10));
+        events.add(new Event("hello",currentDate.plusYears(2)));
         events.add(new Event("test 1",currentDate,LocalTime.of(21, 33,32),10));
         events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
         events.add(new Event("test 3",currentDate.plusWeeks(1)));

@@ -26,18 +26,19 @@ public class Notify implements AppPlugin {
             System.out.println(api.getBundle().getString("notify-today-events"));
             System.out.println();
 
+            System.out.println(api.getBundle().getString("event-title")+" "+api.getPluginTitle());
             LocalDate date = (LocalDate) eventData.get(0);
-            System.out.println(api.getBundle().getString("notify-date")+" "+dtf.format(date));
+            System.out.println(api.getBundle().getString("event-date")+" "+dtf.format(date));
 
             if (eventData.get(1) instanceof String) {
-                System.out.println(api.getBundle().getString("notify-all-day"));
+                System.out.println(api.getBundle().getString("event-all-day"));
             }
             else {
                 LocalTime time = (LocalTime) eventData.get(1);
-                System.out.println(api.getBundle().getString("notify-time")+" "+time.format(timeFormatter));
+                System.out.println(api.getBundle().getString("event-time")+" "+time.format(timeFormatter));
 
                 int duration = (int) eventData.get(2);
-                System.out.println(api.getBundle().getString("notify-duration")+" "+duration);
+                System.out.println(api.getBundle().getString("event-duration")+" "+duration);
             }
         }
     }
