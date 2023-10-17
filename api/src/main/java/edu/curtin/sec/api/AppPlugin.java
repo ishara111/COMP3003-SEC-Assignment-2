@@ -7,5 +7,5 @@ public interface AppPlugin {
 
     void startPlugin(AppPluginAPI api);
 
-    void notifyPlugin(AppPluginAPI api, Map<String, List<String>> data);
+    void notifyPlugin(AppPluginAPI api, Map<String, List<Object>> data);
 }

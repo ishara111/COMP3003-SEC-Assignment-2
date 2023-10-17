@@ -24,32 +24,60 @@ public class NotificationManager{
     }
 
     public void notifyPlugin() {
-        sendEvents(getTodayEventTitles(app.currentDate));
+        //sendEvents(getTodayEventTitles(app.currentDate));
+        sendEvents(getTodayEventTitles());
+
     }
 
 //    public void registerPlugin(AppPlugin plugin) {
 //        plugins.add(plugin);
 //    }
 
+//    private Map<String, List<String>> getTodayEventTitles() {
+//
+//        Map<String, List<String>> todayEvents = new HashMap<>();
+//        LocalTime currentTime = LocalTime.now();
+//
+//        for (Event event : app.events) {                //CHANGE THE LIST OF STRING TO OBJECTS AND SEE IF THAT WORKS
+//            if (event.getStartDate().isEqual(LocalDate.now())) {
+//                List<String> data = new ArrayList<>();
+//                if (event.isAllDay()) {
+//                    data.add(event.getStartDate().toString());
+//                    data.add("all-day");
+//                    todayEvents.put(event.getTitle(), data);
+//                    //event.setNotified(true);
+//
+//                } else if (event.getStartTime().equals(currentTime)) {
+//                    data.add(event.getStartDate().toString());
+//                    data.add(event.getStartTime().toString());
+//                    data.add(Integer.toString(event.getDuration()));
+//                    todayEvents.put(event.getTitle(), data);
+//                    //event.setNotified(true);
+//
+//                }
+//            }
+//        }
+//
+//        return todayEvents;
+//    }
+    private Map<String, List<Object>> getTodayEventTitles() {
 
-    private Map<String, List<String>> getTodayEventTitles(LocalDate date) {
-
-        Map<String, List<String>> todayEvents = new HashMap<>();
+        Map<String, List<Object>> todayEvents = new HashMap<>();
         LocalTime currentTime = LocalTime.now();
 
-        for (Event event : app.events) {
-            if (event.getStartDate().isEqual(date)) {
-                List<String> data = new ArrayList<>();
+        for (Event event : app.events) {                //CHANGE THE LIST OF STRING TO OBJECTS AND SEE IF THAT WORKS
+            if (event.getStartDate().isEqual(LocalDate.now())) {
+                List<Object> data = new ArrayList<>();
                 if (event.isAllDay()) {
-                    data.add(event.getStartDate().toString());
+                    data.add(event.getStartDate());
                     data.add("all-day");
                     todayEvents.put(event.getTitle(), data);
                     //event.setNotified(true);
 
-                } else if (event.getStartTime().equals(currentTime)) {
-                    data.add(event.getStartDate().toString());
-                    data.add(event.getStartTime().toString());
-                    data.add(Integer.toString(event.getDuration()));
+                } else if (event.getStartTime().isBefore(currentTime)) {
+                    data.add(event.getStartDate());
+                    data.add(event.getStartTime());
+                    data.add(event.getDuration());
                     todayEvents.put(event.getTitle(), data);
                     //event.setNotified(true);
 
@@ -67,7 +95,7 @@ public class NotificationManager{
 //        }
 //    }
 
-    public void sendEvents(Map<String, List<String>> data) {
+    public void sendEvents(Map<String, List<Object>> data) {
         plugin.notifyPlugin(apiImpl,data);
     }
 }

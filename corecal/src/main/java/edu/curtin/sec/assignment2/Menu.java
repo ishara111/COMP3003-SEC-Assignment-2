@@ -70,7 +70,7 @@ public class Menu {
                     break;
                 case "search":
                     System.out.print("\033[H\033[2J");
-
+                    search();
                     break;
                 case "quit":
                     System.out.print("\033[H\033[2J");
@@ -78,6 +78,7 @@ public class Menu {
                     scanner.close();
                     System.exit(0);
                 case "locale":
+                    System.out.print("\033[H\033[2J");
                     changeLocale();
                     break;
                 case "help":
@@ -93,6 +94,13 @@ public class Menu {
 
             }
         }
+    }
+
+    private void search()
+    {
+        System.out.println();
+        System.out.println(app.bundle.getString("search-menu"));
+        String input = scanner.nextLine();
     }
 
     private void changeLocale()

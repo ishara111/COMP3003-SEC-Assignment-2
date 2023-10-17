@@ -6,9 +6,7 @@ import edu.curtin.sec.assignment2.models.Plugin;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ApiImpl implements AppPluginAPI {
     private App app;
@@ -48,4 +46,13 @@ public class ApiImpl implements AppPluginAPI {
         app.events.add(new Event(title,startDate));
     }
 
+    @Override
+    public Locale getLocale() {
+        return app.locale;
+    }
+
+    @Override
+    public ResourceBundle getBundle() {
+        return app.bundle;
+    }
 }

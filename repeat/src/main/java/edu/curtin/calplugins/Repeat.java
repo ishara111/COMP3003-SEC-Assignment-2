@@ -30,7 +30,7 @@ public class Repeat implements AppPlugin{
     }
 
     @Override
-    public void notifyPlugin(AppPluginAPI api, Map<String, List<String>> data) {
+    public void notifyPlugin(AppPluginAPI api, Map<String, List<Object>> data) {
 
     }
 }
