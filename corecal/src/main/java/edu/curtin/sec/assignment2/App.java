@@ -1,13 +1,17 @@
 package edu.curtin.sec.assignment2;
-import edu.curtin.terminalgrid.TerminalGrid;
+import edu.curtin.sec.assignment2.models.Event;
+import edu.curtin.sec.api.*;
+import edu.curtin.sec.assignment2.models.Plugin;
 
 import java.io.*;
 import java.nio.charset.CharacterCodingException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.regex.Pattern;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This illustrates different ways to use TerminalGrid. You may not feel you _need_ all the
@@ -20,7 +24,13 @@ public class App
     public LocalDate currentDate = LocalDate.now();
 
     public List<Event> events = new ArrayList<>();
+    public List<Plugin> plugins  = new ArrayList<>();
     public static StringBuilder dslContent = new StringBuilder();
+    private ExecutorService notifyPlugins = new ThreadPoolExecutor(
+            1, 81, // Minimum 1 threads, maximum 81.
+            3, TimeUnit.SECONDS, // Destroy excess idle threads after 3 seconds.
+            new SynchronousQueue<>() // Used to deliver new tasks to the threads.
+    );
 
     public static void main(String[] args) {
 
@@ -30,7 +40,9 @@ public class App
 
         App app = new App();
 
-        app.loadEvents();
+        app.loadTestStuff();
+
+        app.loadPlugins();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -40,12 +52,56 @@ public class App
 
         menu.controlMenu();
 
+
     }
-    private void loadEvents()
+    List<ApiImpl> apiImpls = new ArrayList<>();
+    List<AppPlugin> appPlugins = new ArrayList<>();
+    public void loadPlugins()
     {
-        events.add(new Event("test 1",currentDate, LocalTime.of(18, 15),10));
+        AppPlugin appPlugin = null;
+        //notificationManager = new NotificationManager(this,)
+
+        for (Plugin plugin: plugins) {
+            try
+            {
+                Class<?> pluginClass = Class.forName(plugin.getClassName());
+                appPlugin = ((AppPlugin) pluginClass.getConstructor().newInstance());
+                appPlugins.add(appPlugin);
+                ApiImpl apiImpl = new ApiImpl(this,plugin);
+                apiImpls.add(apiImpl);
+                appPlugin.startPlugin(apiImpl);
+
+
+            }
+            catch(ReflectiveOperationException | ClassCastException e)
+            {
+                System.out.println(e.getClass().getName()+" : "+e.getMessage());
+                System.out.println("plugin ignored");
+            }
+
+        }
+    }
+
+    public void notifyPlugins()
+    {
+        for (int i = 0; i < appPlugins.size(); i++) {
+            //notifyPlugins.submit(new NotificationManager(this, apiImpls.get(i), appPlugins.get(i)));
+            new NotificationManager(this, apiImpls.get(i), appPlugins.get(i)).notifyPlugin();
+        }
+
+    }
+    private void loadTestStuff()
+    {
+        events.add(new Event("hello",currentDate.plusYears(2)));
+        events.add(new Event("test 1",currentDate,LocalTime.of(21, 33,32),10));
         events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
         events.add(new Event("test 3",currentDate.plusWeeks(1)));
+
+        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin test 4",currentDate.plusDays(5),LocalTime.of(8, 15,32),2));
+        plugins.add(new Plugin("edu.curtin.calplugins.test","plugin allday",currentDate.plusDays(5)));
+        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin allday",currentDate.plusDays(5)));
+        plugins.add(new Plugin("edu.curtin.calplugins.Notify","test 1"));
+        plugins.add(new Plugin("edu.curtin.calplugins.Notify","plugin test 4"));
     }
 
     private static void readFile(String[] args)

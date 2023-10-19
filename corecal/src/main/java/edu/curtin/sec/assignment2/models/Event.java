@@ -1,4 +1,4 @@
-package edu.curtin.sec.assignment2;
+package edu.curtin.sec.assignment2.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,6 +13,7 @@ public class Event {
     private String text;
     private boolean allDay;
     private boolean added;
+    //private boolean notified;
     private DateTimeFormatter timeFormatter;
 
     public Event(String title,LocalDate startDate, LocalTime startTime, int duration) {
@@ -22,6 +23,7 @@ public class Event {
         this.duration = duration;
         this.allDay =false;
         this.added = false;
+        //this.notified = false;
     }
     public Event(String title,LocalDate startDate) {
         this.title = title;
@@ -31,6 +33,7 @@ public class Event {
         this.text = this.title;
         this.allDay =true;
         this.added = false;
+        //this.notified = false;
     }
 
     public boolean isAllDay() {
@@ -61,4 +64,20 @@ public class Event {
     public void setAdded(boolean added) {
         this.added = added;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+//    public boolean isNotified() {
+//        return notified;
+//    }
+//
+//    public void setNotified(boolean notified) {
+//        this.notified = notified;
+//    }
 }

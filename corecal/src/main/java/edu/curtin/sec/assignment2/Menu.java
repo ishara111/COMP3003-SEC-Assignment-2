@@ -1,6 +1,9 @@
 package edu.curtin.sec.assignment2;
 
+import edu.curtin.sec.assignment2.models.Event;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -24,6 +27,7 @@ public class Menu {
         while (true) {
             calendar.printCalendar();
             System.out.println();
+            app.notifyPlugins();
             System.out.println();
             System.out.println(app.bundle.getString("menu-prompt"));
             System.out.println();
@@ -69,7 +73,9 @@ public class Menu {
                     break;
                 case "search":
                     System.out.print("\033[H\033[2J");
-
+                    System.out.println();
+                    search();
+                    System.out.println();
                     break;
                 case "quit":
                     System.out.print("\033[H\033[2J");
@@ -77,6 +83,7 @@ public class Menu {
                     scanner.close();
                     System.exit(0);
                 case "locale":
+                    System.out.print("\033[H\033[2J");
                     changeLocale();
                     break;
                 case "help":
@@ -92,6 +99,48 @@ public class Menu {
 
             }
         }
+    }
+
+    private boolean search()
+    {
+        System.out.println();
+        System.out.println(app.bundle.getString("search-menu"));
+        String input = scanner.nextLine();
+
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", app.locale);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", app.locale);
+
+        while(date.isBefore(app.currentDate.plusYears(1)))
+        {
+            for (Event event:app.events) {
+                if(event.getTitle().contains(input) && date.equals(event.getStartDate()))
+                {
+                    System.out.println(app.bundle.getString("search-found"));
+
+                    app.currentDate = event.getStartDate();
+
+                    System.out.println();
+                    System.out.println(app.bundle.getString("event-title")+" "+event.getTitle());
+                    System.out.println(app.bundle.getString("event-date")+" "+dtf.format(event.getStartDate()));
+
+                    if (event.isAllDay())
+                    {
+                        System.out.println(app.bundle.getString("event-all-day"));
+                    }
+                    else {
+                        System.out.println(app.bundle.getString("event-time")+" "+
+                                event.getStartTime().format(timeFormatter));
+
+                        System.out.println(app.bundle.getString("event-duration")+" "+event.getDuration());
+                    }
+                    return true;
+                }
+            }
+            date = date.plusDays(1);
+        }
+        System.out.println(app.bundle.getString("search-not-found"));
+        return false;
     }
 
     private void changeLocale()
