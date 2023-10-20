@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class Repeat implements AppPlugin{
+public class Repeat implements CalendarAPI {
     @Override
-    public void startPlugin(AppPluginAPI api) {
+    public void startPlugin(CalendarAPIData api) {
 
         if (api.getPluginStartTime()!=null)
         {
@@ -30,7 +30,7 @@ public class Repeat implements AppPlugin{
     }
 
     @Override
-    public void notifyPlugin(AppPluginAPI api, Map<String, List<Object>> data) {
+    public void notifyPlugin(CalendarAPIData api, Map<String, List<Object>> data) {
 
     }
 }

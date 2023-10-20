@@ -8,10 +8,6 @@ import java.nio.charset.CharacterCodingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This illustrates different ways to use TerminalGrid. You may not feel you _need_ all the
@@ -25,12 +21,14 @@ public class App
 
     public List<Event> events = new ArrayList<>();
     public List<Plugin> plugins  = new ArrayList<>();
+
+    public List<String> scripts = new ArrayList<>();
     public static StringBuilder dslContent = new StringBuilder();
-    private ExecutorService notifyPlugins = new ThreadPoolExecutor(
-            1, 81, // Minimum 1 threads, maximum 81.
-            3, TimeUnit.SECONDS, // Destroy excess idle threads after 3 seconds.
-            new SynchronousQueue<>() // Used to deliver new tasks to the threads.
-    );
+//    private ExecutorService notifyPlugins = new ThreadPoolExecutor(
+//            1, 81, // Minimum 1 threads, maximum 81.
+//            3, TimeUnit.SECONDS, // Destroy excess idle threads after 3 seconds.
+//            new SynchronousQueue<>() // Used to deliver new tasks to the threads.
+//    );
 
     public static void main(String[] args) {
 
@@ -41,6 +39,8 @@ public class App
         App app = new App();
 
         app.loadTestStuff();
+
+        app.runScripts();
 
         app.loadPlugins();
 
@@ -55,21 +55,21 @@ public class App
 
     }
     List<ApiImpl> apiImpls = new ArrayList<>();
-    List<AppPlugin> appPlugins = new ArrayList<>();
+    List<CalendarAPI> calendarAPIS = new ArrayList<>();
     public void loadPlugins()
     {
-        AppPlugin appPlugin = null;
+        CalendarAPI calendarAPI = null;
         //notificationManager = new NotificationManager(this,)
 
         for (Plugin plugin: plugins) {
             try
             {
                 Class<?> pluginClass = Class.forName(plugin.getClassName());
-                appPlugin = ((AppPlugin) pluginClass.getConstructor().newInstance());
-                appPlugins.add(appPlugin);
+                calendarAPI = ((CalendarAPI) pluginClass.getConstructor().newInstance());
+                calendarAPIS.add(calendarAPI);
                 ApiImpl apiImpl = new ApiImpl(this,plugin);
                 apiImpls.add(apiImpl);
-                appPlugin.startPlugin(apiImpl);
+                calendarAPI.startPlugin(apiImpl);
 
 
             }
@@ -84,11 +84,22 @@ public class App
 
     public void notifyPlugins()
     {
-        for (int i = 0; i < appPlugins.size(); i++) {
+        for (int i = 0; i < calendarAPIS.size(); i++) {
             //notifyPlugins.submit(new NotificationManager(this, apiImpls.get(i), appPlugins.get(i)));
-            new NotificationManager(this, apiImpls.get(i), appPlugins.get(i)).notifyPlugin();
+            new NotificationManager(this, apiImpls.get(i), calendarAPIS.get(i)).notifyPlugin();
         }
+    }
 
+    public void runScripts()
+    {
+        //notificationManager = new NotificationManager(this,)
+        for (String script: scripts) {
+
+            ApiImpl apiImpl = new ApiImpl(this);
+            new ScriptHandler().runScript(apiImpl,script);
+            System.out.print("\033[H\033[2J");
+
+        }
     }
     private void loadTestStuff()
     {
@@ -102,6 +113,11 @@ public class App
         plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin allday",currentDate.plusDays(5)));
         plugins.add(new Plugin("edu.curtin.calplugins.Notify","test 1"));
         plugins.add(new Plugin("edu.curtin.calplugins.Notify","plugin test 4"));
+
+        scripts.add("print(\"Now starting script...\")");
+        scripts.add("print(\"Now starting script...\")");
+        scripts.add("api.createEvent(\"script\",api.convertDate(\"2023-10-20\"))");
+        scripts.add("print(5+10)");
     }
 
     private static void readFile(String[] args)
