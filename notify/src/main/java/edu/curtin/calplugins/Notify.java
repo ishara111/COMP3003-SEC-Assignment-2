@@ -8,14 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-public class Notify implements AppPlugin {
+public class Notify implements CalendarAPI {
     @Override
-    public void startPlugin(AppPluginAPI api) {
+    public void startPlugin(CalendarAPIData api) {
 
     }
 
     @Override
-    public void notifyPlugin(AppPluginAPI api, Map<String, List<Object>> data) {
+    public void notifyPlugin(CalendarAPIData api, Map<String, List<Object>> data) {
         //System.out.println(api.getPluginTitle());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", api.getLocale());
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", api.getLocale());

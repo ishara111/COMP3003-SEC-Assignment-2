@@ -1,8 +1,7 @@
 package edu.curtin.sec.assignment2;
 
-import edu.curtin.sec.api.AppPlugin;
+import edu.curtin.sec.api.CalendarAPI;
 import edu.curtin.sec.assignment2.models.Event;
-import edu.curtin.sec.assignment2.models.Plugin;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,10 +13,10 @@ import java.util.Map;
 public class NotificationManager{
     private App app;
     private ApiImpl apiImpl;
-    private AppPlugin plugin;
+    private CalendarAPI plugin;
     //private List<AppPlugin> plugins = new ArrayList<>();
 
-    public NotificationManager(App app, ApiImpl apiImpl, AppPlugin plugin) {
+    public NotificationManager(App app, ApiImpl apiImpl, CalendarAPI plugin) {
         this.app = app;
         this.apiImpl = apiImpl;
         this.plugin = plugin;
