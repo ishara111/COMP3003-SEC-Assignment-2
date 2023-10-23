@@ -2,11 +2,13 @@ package edu.curtin.sec.assignment2;
 import edu.curtin.sec.assignment2.models.Event;
 import edu.curtin.sec.api.*;
 import edu.curtin.sec.assignment2.models.Plugin;
+import org.python.modules._systemrestart;
 
 import java.io.*;
 import java.nio.charset.CharacterCodingException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -38,7 +40,8 @@ public class App
 
         App app = new App();
 
-        app.loadTestStuff();
+        //app.loadTestStuff();
+        app.parse();
 
         app.runScripts();
 
@@ -100,6 +103,66 @@ public class App
             System.out.print("\033[H\033[2J");
 
         }
+    }
+
+    private void parse()
+    {
+        try {
+            MyParser parser = new MyParser(new StringReader(dslContent.toString()));
+            parser.parse();
+
+            System.out.println(parser.getEvents().size());
+            for (Object event: parser.getEvents() ) {
+//
+                String title = (((MyParser.Event) event).getTitle().trim());
+                String dateString = ((MyParser.Event) event).getStartDate().trim();
+                String timeString = ((MyParser.Event) event).getStartTime().trim();
+                String durationString  = ((MyParser.Event) event).getDuration().trim();
+
+                LocalDate date = convertDate(dateString);
+                LocalTime time = converTime(timeString);
+
+//                String title = ((MyParser.Event) event).getTitle();
+//                LocalDate date = convertDate(((MyParser.Event) event).getStartDate().trim());
+//                LocalTime time = converTime(((MyParser.Event) event).getStartTime().trim());
+//                int duration = Integer.parseInt(((MyParser.Event) event).getDuration().trim());
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public LocalDate convertDate(String date) {
+        String dateString = "2023-10-19";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+
+            return LocalDate.parse(date, formatter);
+
+        } catch (Exception e) {
+            System.out.println("Unable to parse the date: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public LocalTime converTime(String time) {
+        //String timeString = "14:30:45";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        try {
+
+            return LocalTime.parse(time, formatter);
+
+        } catch (Exception e) {
+
+            System.out.println("Unable to parse the time: " + e.getMessage());
+        }
+        return null;
     }
     private void loadTestStuff()
     {

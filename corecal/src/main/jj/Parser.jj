@@ -1,0 +1,317 @@
+options {
+    IGNORE_CASE=true;
+    }
+PARSER_BEGIN(MyParser)
+
+// Needed for the array list class
+package edu.curtin.sec.assignment2;
+import java.util.*;
+
+public class MyParser {
+    static class Event {
+        public String title;
+        public String startDate;
+        public String startTime;
+        public String duration;
+
+        //private boolean notified;
+
+        public Event(String title,String startDate, String startTime, String duration) {
+            this.title = title;
+            this.startDate = startDate;
+            this.startTime = startTime;
+            this.duration = duration;
+
+        }
+        public Event(String title,String startDate) {
+            this.title = title;
+            this.startDate = startDate;
+            this.startTime = null;
+            this.duration = "";
+
+        }
+
+        public String getStartDate()
+        {
+            return startDate;
+        }
+        public String getTitle()
+        {
+            return title;
+        }
+        public String getStartTime()
+        {
+            return startTime;
+        }
+        public String getDuration()
+        {
+            return duration;
+        }
+    }
+
+    static class Plugin {
+        private String className;
+        private String title;
+        private String startDate;
+        private String startTime;
+        private String duration;
+
+        public Plugin(String className,String title, String startDate, String startTime, String duration) {
+            this.className = className;
+            this.title = title;
+            this.startDate = startDate;
+            this.startTime = startTime;
+            this.duration = duration;
+        }
+
+        public Plugin(String className,String title, String startDate) {
+            this.className = className;
+            this.title = title;
+            this.startDate = startDate;
+        }
+
+        public Plugin(String className, String title) {
+            this.className = className;
+            this.title = title;
+        }
+
+        public String getClassName() {
+            return className;
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+    public static ArrayList events = new ArrayList();
+    public static ArrayList plugins = new ArrayList();
+    public static ArrayList scripts = new ArrayList();
+
+     public static ArrayList getEvents()
+     {
+         return events;
+     }
+
+     public static ArrayList getScripts()
+     {
+         return scripts;
+     }
+     public static ArrayList getPlugins()
+     {
+         return plugins;
+     }
+
+
+}
+
+
+PARSER_END(MyParser)
+
+SKIP:
+{
+    " " |
+    "\n" |
+    "\r" |
+    "\t"
+}
+
+TOKEN :
+{
+    <EVENT : "event">
+    |<SCRIPT : "script">
+    |<PLUGIN : "plugin">
+    |<PLUGINNAME : (["a"-"z", "A"-"Z", "."])+>
+    |<TEXT : "\"" ( ~["\""] | "\"\"" )* "\"" >
+//    |<TEXT : "\"" (~["\""] | ["a"-"z", "A"-"Z", "0"-"9", " ", "\n", "\r", "\t"])+ "\"">
+    |<DATE : (["0" - "9"])+ "-" (["0" - "9"])+ "-" (["0" - "9"])+ >
+    |<TIME : (["0" - "9"])+ ":" (["0" - "9"])+ ":" (["0" - "9"])+ >
+    |<DURATION : (["0" - "9"])+ >
+    |<ALLDAY : "all-day" >
+
+
+}
+
+void parse():
+{
+}
+{
+    // File ends with EOF
+    start() <EOF>
+}
+
+// Recognises a list of places or a list of places relative to each other
+void start() throws ParseException:
+{
+}
+{
+    (   // Either were entering a list of things we see, or a list of things we see with respect to some other thing
+        events() | plugins() | scripts()
+
+
+    )* // You can have as many lines of this input as you like
+}
+
+void events() throws ParseException:
+{
+    String date= "";
+    String time= "";
+    String duration= "";
+    String title= "";
+
+    Token dateToken= null;
+    Token timeToken= null;
+    Token durationToken= null;
+    Token titleToken= null;
+}
+{
+
+    try {
+            // This bit has to always be at the start
+              ( <EVENT>
+              dateToken=<DATE>{ date += " " + dateToken.image; }
+              (
+              timeToken=<TIME>{ time += " " + timeToken.image; }
+              durationToken=<DURATION>{ duration += " " + durationToken.image; }
+
+              |
+              <ALLDAY>
+              )
+              titleToken=<TEXT> { title += " " + titleToken.image; }
+              )
+//              timeToken=<TIME>{ time += " " + timeToken.image; }
+//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
+//              |
+//
+//
+//
+//              )
+              {
+                title = title.replace("\"", "");
+                date = date.replace("\"", "");
+                time = time.replace("\"", "");
+                duration = duration.replace("\"", "");
+                events.add(new Event(title,date,time,duration));
+              }
+
+
+    }
+
+    catch(ParseException e) {
+        System.err.println("[PARSING ERROR] Event defined incorrectly");
+        System.err.println(e.getMessage());
+        System.exit(0);
+    }
+}
+
+
+void plugins() throws ParseException:
+{
+    String name= "";
+    String title= "";
+    String date = "";
+    String time = "";
+    String duration = "";
+
+    Token nameToken= null;
+    Token titleToken= null;
+    Token dateToken = null;
+    Token timeToken = null;
+    Token durationToken = null;
+
+}
+{
+
+    try {
+            // This bit has to always be at the start
+            <PLUGIN>
+            nameToken=<PLUGINNAME> { name += " " + nameToken.image; }
+            "{"
+            "title:"titleToken=<TEXT> { title += " " + titleToken.image; }
+            ",""startDate:"dateToken=<TEXT> { date += " " + dateToken.image; }
+            (
+            ",""startTime:"timeToken=<TEXT>{ time += " " + timeToken.image; }
+            ",""duration:"durationToken=<TEXT>{ duration += " " + durationToken.image; }
+            "}"
+            |
+            "}"
+            )
+//              timeToken=<TIME>{ time += " " + timeToken.image; }
+//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
+//              |
+//
+//
+//
+//              )
+              {
+              name = name.replace("\"", "");
+              title = title.replace("\"", "");
+              date = date.replace("\"", "");
+              time = time.replace("\"", "");
+              duration = duration.replace("\"", "");
+                plugins.add(new Plugin(name,title,date,time,duration));
+              }
+
+
+    }
+
+    catch(ParseException e) {
+        System.err.println("[PARSING ERROR] Plugin defined incorrectly");
+        System.err.println(e.getMessage());
+        System.exit(0);
+    }
+}
+
+
+void scripts() throws ParseException:
+{
+    String script= "";
+
+
+    Token scriptToken= null;
+
+}
+{
+
+    try {
+            // This bit has to always be at the start
+            (<SCRIPT>
+            scriptToken=<TEXT> { script += " " + scriptToken.image; }
+            )
+//              timeToken=<TIME>{ time += " " + timeToken.image; }
+//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
+//              |
+//
+//
+//
+//              )
+              {
+              script = script.substring(1);
+              script = script.substring(1, script.length() - 1);
+              script = script.replaceAll("\"\"", "\"");
+              scripts.add(script);
+              }
+
+
+    }
+
+    catch(ParseException e) {
+        System.err.println("[PARSING ERROR] Script defined incorrectly");
+        System.err.println(e.getMessage());
+        System.exit(0);
+    }
+}
+
+
