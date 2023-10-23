@@ -25,29 +25,16 @@ title: "plugin notify test"
 }
 
 script "
-from datetime import datetime, timedelta
 
-def get_holidays_in_date_range(start_date, end_date):
-    holidays = []
-    current_date = start_date
+holidays = [
+    (""Christmas Day"", ""2023-12-25""),
+    (""New Year's Eve"", ""2023-12-31""),
+    (""New Year's Day"", ""2024-01-01"")
+]
 
-    while current_date <= end_date:
-        if current_date.weekday() == 5:  # Saturday
-            holidays.append(current_date.strftime(""%Y-%m-%d""))
-
-        current_date += timedelta(days=1)
-
-    return holidays
-
-# Input: Start and end date as datetime objects
-start_date = datetime(2023, 10, 23)
-end_date = datetime(2024, 10, 23)
-
-# Get the list of holidays in the specified date range
-holidays = get_holidays_in_date_range(start_date, end_date)
-
-# Print the list of holidays
 for holiday in holidays:
-    print(holiday)
+    name, date = holiday
+    api.createEvent(name,api.convertDate(date))
+
 "
 
