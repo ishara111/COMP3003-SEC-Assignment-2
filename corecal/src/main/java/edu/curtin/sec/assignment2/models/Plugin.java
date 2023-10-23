@@ -10,18 +10,22 @@ public class Plugin {
     private LocalTime startTime;
     private int duration;
 
-    public Plugin(String className,String title, LocalDate startDate, LocalTime startTime, int duration) {
+    private int repeat;
+
+    public Plugin(String className,String title, LocalDate startDate, LocalTime startTime, int duration,int repeat) {
         this.className = className;
         this.title = title;
         this.startDate = startDate;
         this.startTime = startTime;
         this.duration = duration;
+        this.repeat = repeat;
     }
 
-    public Plugin(String className,String title, LocalDate startDate) {
+    public Plugin(String className,String title, LocalDate startDate,int repeat) {
         this.className = className;
         this.title = title;
         this.startDate = startDate;
+        this.repeat = repeat;
     }
 
     public Plugin(String className, String title) {
@@ -47,5 +51,9 @@ public class Plugin {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getRepeat() {
+        return repeat;
     }
 }

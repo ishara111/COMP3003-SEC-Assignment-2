@@ -19,12 +19,24 @@ public class Repeat implements CalendarAPI {
 
             while(date.isBefore(endDate))
             {
-                date = date.plusDays(api.getPluginDuration());
+                date = date.plusDays(api.getPluginRepeat());
                 api.createEvent(api.getPluginTitle(),date,api.getPluginStartTime(),api.getPluginDuration());
             }
         }
         else {
             api.createEvent(api.getPluginTitle(),api.getPluginStartDate());
+
+            LocalDate date = api.getPluginStartDate();
+            LocalDate endDate = api.getPluginStartDate().plusYears(1);
+
+            while(date.isBefore(endDate))
+            {
+                date = date.plusDays(api.getPluginRepeat());
+                api.createEvent(api.getPluginTitle(),date);
+            }
+
+
+            //api.createEvent(api.getPluginTitle(),api.getPluginStartDate());
         }
 
     }

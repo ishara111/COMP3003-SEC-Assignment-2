@@ -1,15 +1,40 @@
-event 2023-10-29 15:00:00 90 "Meeting 1"
-event 2023-10-31 08:30:45 45 "Meeting 2"
-plugin com.example.pluginpkg.ExamplePlugin
-{
-    key1: "value 1",
-    key2: "value 2"
+event 2023-10-23 15:00:36 2 "Meeting 1"
+event 2023-10-25 08:30:45 3 "Meeting 2"
+
+event 2023-10-26
+    all-day "all day"
+
+plugin edu.curtin.calplugins.Repeat {
+title: "repeat",
+startDate: "2023-10-23",
+repeat: "2",
+startTime: "18:30:45",
+duration: "2"
 }
-event 2023-12-25
-    all-day "Christmas Day"
-plugin com.example.plugin2pkg.DemoPlugin { keyA: "X", keyB: "Y", keyC: "Z" }
+
+plugin edu.curtin.calplugins.Repeat{
+title: "repeat allday ",
+startDate: "2023-10-28",
+repeat: "2"
+
+}
+
+plugin edu.curtin.calplugins.Notify{
+title: "plugin notify test"
+
+}
 
 script "
-# I'm a Python script!
-print(""hello world"")
+
+holidays = [
+    (""Christmas Day"", ""2023-12-25""),
+    (""New Year's Eve"", ""2023-12-31""),
+    (""New Year's Day"", ""2024-01-01"")
+]
+
+for holiday in holidays:
+    name, date = holiday
+    api.createEvent(name,api.convertDate(date))
+
 "
+

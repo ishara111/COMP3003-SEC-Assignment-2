@@ -43,6 +43,11 @@ public class ApiImpl implements CalendarAPIData {
     }
 
     @Override
+    public int getPluginRepeat() {
+        return plugin.getRepeat();
+    }
+
+    @Override
     public void createEvent(String title, LocalDate startDate, LocalTime startTime, int duration) {
         app.events.add(new Event(title,startDate,startTime,duration));
     }
@@ -62,34 +67,11 @@ public class ApiImpl implements CalendarAPIData {
 
     @Override
     public LocalDate convertDate(String date) {
-        String dateString = "2023-10-19";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        try {
-
-            return LocalDate.parse(date, formatter);
-
-        } catch (Exception e) {
-            System.out.println("Unable to parse the date: " + e.getMessage());
-        }
-        return null;
+        return app.convertDate(date);
     }
 
     @Override
     public LocalTime converTime(String time) {
-        //String timeString = "14:30:45";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        try {
-
-            return LocalTime.parse(time, formatter);
-
-        } catch (Exception e) {
-
-            System.out.println("Unable to parse the time: " + e.getMessage());
-        }
-        return null;
+        return app.converTime(time);
     }
 }

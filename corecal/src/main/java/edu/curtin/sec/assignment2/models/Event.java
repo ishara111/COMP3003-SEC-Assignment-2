@@ -50,7 +50,7 @@ public class Event {
 
     public void createText(Locale locale) {
         this.timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
-        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" "+this.title;
+        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" mins "+this.title;
     }
     public String getText() {
 
