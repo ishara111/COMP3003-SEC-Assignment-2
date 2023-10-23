@@ -1,11 +1,33 @@
-event 2023-10-29 15:00:36 90 "Meeting 1"
-event 2023-10-31 08:30:45 45 "Meeting 2"
+event 2023-10-23 15:00:36 2 "Meeting 1"
+event 2023-10-25 08:30:45 3 "Meeting 2"
 
-event 2023-12-25
+event 2023-10-26
     all-day "Christmas Day"
 
+plugin edu.curtin.calplugins.Repeat {
+title: "plugin allday",
+
+startDate: "2023-10-23",
+startTime: "18:30:45",
+duration: "2"
+
+}
+
+plugin edu.curtin.calplugins.Repeat{
+title: "plugin notify test",
+
+startDate: "2023-10-23"
+
+}
+
+plugin edu.curtin.calplugins.Notify{
+title: "plugin notify test"
+
+
+}
 
 script "
 # I'm a Python script!
 print(""hello world"")
 "
+

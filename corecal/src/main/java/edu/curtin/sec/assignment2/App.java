@@ -26,11 +26,7 @@ public class App
 
     public List<String> scripts = new ArrayList<>();
     public static StringBuilder dslContent = new StringBuilder();
-//    private ExecutorService notifyPlugins = new ThreadPoolExecutor(
-//            1, 81, // Minimum 1 threads, maximum 81.
-//            3, TimeUnit.SECONDS, // Destroy excess idle threads after 3 seconds.
-//            new SynchronousQueue<>() // Used to deliver new tasks to the threads.
-//    );
+
 
     public static void main(String[] args) {
 
@@ -40,7 +36,6 @@ public class App
 
         App app = new App();
 
-        //app.loadTestStuff();
         app.parse();
 
         app.runScripts();
@@ -111,77 +106,75 @@ public class App
             MyParser parser = new MyParser(new StringReader(dslContent.toString()));
             parser.parse();
 
-            System.out.println(parser.getEvents().size());
             for (Object event: parser.getEvents() ) {
-//
-                String title = (((MyParser.Event) event).getTitle().trim());
-                String dateString = ((MyParser.Event) event).getStartDate().trim();
-                String timeString = ((MyParser.Event) event).getStartTime().trim();
-                String durationString  = ((MyParser.Event) event).getDuration().trim();
 
-                LocalDate date = convertDate(dateString);
-                LocalTime time = converTime(timeString);
+                String title = ((MyParser.Event) event).getTitle();
+                LocalDate date = convertDate(((MyParser.Event) event).getStartDate());
+                if(!((MyParser.Event) event).getStartTime().isEmpty())
+                {
+                    LocalTime time = converTime(((MyParser.Event) event).getStartTime());
+                    int duration = Integer.parseInt(((MyParser.Event) event).getDuration());
 
-//                String title = ((MyParser.Event) event).getTitle();
-//                LocalDate date = convertDate(((MyParser.Event) event).getStartDate().trim());
-//                LocalTime time = converTime(((MyParser.Event) event).getStartTime().trim());
-//                int duration = Integer.parseInt(((MyParser.Event) event).getDuration().trim());
+                    events.add(new Event(title,date,time,duration));
+                }
+                else {
+                    events.add(new Event(title,date));
+                }
+            }
 
+            for (Object plugin: parser.getPlugins() ) {
+
+                String className = ((MyParser.Plugin) plugin).getClassName();
+                String title = ((MyParser.Plugin) plugin).getTitle();
+                if (!((MyParser.Plugin) plugin).getStartDate().isEmpty())
+                {
+                    LocalDate date = convertDate(((MyParser.Plugin) plugin).getStartDate());
+
+                    if(!((MyParser.Plugin) plugin).getStartTime().isEmpty())
+                    {
+                        LocalTime time = converTime(((MyParser.Plugin) plugin).getStartTime());
+                        int duration = Integer.parseInt(((MyParser.Plugin) plugin).getDuration());
+
+                        plugins.add(new Plugin(className,title,date,time,duration));
+                    }
+                    else {
+                        plugins.add(new Plugin(className,title,date));
+                    }
+                }
+                else {
+                    plugins.add(new Plugin(className,title));
+                }
+            }
+
+            for (Object script: parser.getScripts() ) {
+
+                String scriptText = script.toString();
+
+                scripts.add(scriptText);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public LocalDate convertDate(String date) {
-        String dateString = "2023-10-19";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        try {
-
-            return LocalDate.parse(date, formatter);
-
-        } catch (Exception e) {
-            System.out.println("Unable to parse the date: " + e.getMessage());
-        }
-        return null;
-    }
-
-    public LocalTime converTime(String time) {
-        //String timeString = "14:30:45";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-        try {
-
-            return LocalTime.parse(time, formatter);
-
-        } catch (Exception e) {
-
-            System.out.println("Unable to parse the time: " + e.getMessage());
-        }
-        return null;
-    }
-    private void loadTestStuff()
-    {
-        events.add(new Event("hello",currentDate.plusYears(2)));
-        events.add(new Event("test 1",currentDate,LocalTime.of(21, 33,32),10));
-        events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
-        events.add(new Event("test 3",currentDate.plusWeeks(1)));
-
-        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin test 4",currentDate.plusDays(5),LocalTime.of(8, 15,32),2));
-        plugins.add(new Plugin("edu.curtin.calplugins.test","plugin allday",currentDate.plusDays(5)));
-        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin allday",currentDate.plusDays(5)));
-        plugins.add(new Plugin("edu.curtin.calplugins.Notify","test 1"));
-        plugins.add(new Plugin("edu.curtin.calplugins.Notify","plugin test 4"));
-
-        scripts.add("print(\"Now starting script...\")");
-        scripts.add("print(\"Now starting script...\")");
-        scripts.add("api.createEvent(\"script\",api.convertDate(\"2023-10-20\"))");
-        scripts.add("print(5+10)");
-    }
+//    private void loadTestStuff()
+//    {
+//        events.add(new Event("hello",currentDate.plusYears(2)));
+//        events.add(new Event("test 1",currentDate,LocalTime.of(21, 33,32),10));
+//        events.add(new Event("test 2",currentDate.plusDays(3),LocalTime.of(8, 15),12));
+//        events.add(new Event("test 3",currentDate.plusWeeks(1)));
+//
+//        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin test 4",currentDate.plusDays(5),LocalTime.of(8, 15,32),2));
+//        plugins.add(new Plugin("edu.curtin.calplugins.test","plugin allday",currentDate.plusDays(5)));
+//        plugins.add(new Plugin("edu.curtin.calplugins.Repeat","plugin allday",currentDate.plusDays(5)));
+//        plugins.add(new Plugin("edu.curtin.calplugins.Notify","test 1"));
+//        plugins.add(new Plugin("edu.curtin.calplugins.Notify","plugin test 4"));
+//
+//        scripts.add("print(\"Now starting script...\")");
+//        scripts.add("print(\"Now starting script...\")");
+//        scripts.add("api.createEvent(\"script\",api.convertDate(\"2023-10-20\"))");
+//        scripts.add("print(5+10)");
+//    }
 
     private static void readFile(String[] args)
     {
@@ -239,5 +232,33 @@ public class App
             System.out.println("Input File Does Not Exist");
             System.exit(0);
         }
+    }
+
+    public LocalDate convertDate(String date) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+
+            return LocalDate.parse(date, formatter);
+
+        } catch (Exception e) {
+            System.out.println("Unable to parse the date: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public LocalTime converTime(String time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        try {
+
+            return LocalTime.parse(time, formatter);
+
+        } catch (Exception e) {
+
+            System.out.println("Unable to parse the time: " + e.getMessage());
+        }
+        return null;
     }
 }

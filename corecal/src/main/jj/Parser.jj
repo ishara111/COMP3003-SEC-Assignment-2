@@ -181,15 +181,15 @@ void events() throws ParseException:
     try {
             // This bit has to always be at the start
               ( <EVENT>
-              dateToken=<DATE>{ date += " " + dateToken.image; }
+              dateToken=<DATE>{ date = dateToken.image; }
               (
-              timeToken=<TIME>{ time += " " + timeToken.image; }
-              durationToken=<DURATION>{ duration += " " + durationToken.image; }
+              timeToken=<TIME>{ time = timeToken.image; }
+              durationToken=<DURATION>{ duration = durationToken.image; }
 
               |
               <ALLDAY>
               )
-              titleToken=<TEXT> { title += " " + titleToken.image; }
+              titleToken=<TEXT> { title = titleToken.image; }
               )
 //              timeToken=<TIME>{ time += " " + timeToken.image; }
 //              durationToken=<DURATION>{ duration += " " + durationToken.image; }
@@ -235,34 +235,31 @@ void plugins() throws ParseException:
 {
 
     try {
-            // This bit has to always be at the start
             <PLUGIN>
-            nameToken=<PLUGINNAME> { name += " " + nameToken.image; }
+            nameToken=<PLUGINNAME> { name = nameToken.image; }
             "{"
-            "title:"titleToken=<TEXT> { title += " " + titleToken.image; }
-            ",""startDate:"dateToken=<TEXT> { date += " " + dateToken.image; }
-            (
-            ",""startTime:"timeToken=<TEXT>{ time += " " + timeToken.image; }
-            ",""duration:"durationToken=<TEXT>{ duration += " " + durationToken.image; }
-            "}"
-            |
-            "}"
-            )
-//              timeToken=<TIME>{ time += " " + timeToken.image; }
-//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
-//              |
-//
-//
-//
-//              )
-              {
-              name = name.replace("\"", "");
-              title = title.replace("\"", "");
-              date = date.replace("\"", "");
-              time = time.replace("\"", "");
-              duration = duration.replace("\"", "");
-                plugins.add(new Plugin(name,title,date,time,duration));
-              }
+               "title:" titleToken=<TEXT> { title = titleToken.image; }
+                (
+                   "," "startDate:" dateToken=<TEXT> { date = dateToken.image; }
+                   (
+                       "," "startTime:" timeToken=<TEXT> { time = timeToken.image; }
+                       "," "duration:" durationToken=<TEXT> { duration = durationToken.image; }
+                       "}"
+                   |
+                      "}"
+                   )
+                |
+                  "}"
+           )
+
+          {
+          name = name.replace("\"", "");
+          title = title.replace("\"", "");
+          date = date.replace("\"", "");
+          time = time.replace("\"", "");
+          duration = duration.replace("\"", "");
+            plugins.add(new Plugin(name,title,date,time,duration));
+          }
 
 
     }
@@ -288,7 +285,7 @@ void scripts() throws ParseException:
     try {
             // This bit has to always be at the start
             (<SCRIPT>
-            scriptToken=<TEXT> { script += " " + scriptToken.image; }
+            scriptToken=<TEXT> { script = scriptToken.image; }
             )
 //              timeToken=<TIME>{ time += " " + timeToken.image; }
 //              durationToken=<DURATION>{ duration += " " + durationToken.image; }
