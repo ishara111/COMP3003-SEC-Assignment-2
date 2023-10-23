@@ -11,6 +11,7 @@ public interface CalendarAPIData {
     LocalDate getPluginStartDate();
     LocalTime getPluginStartTime();
     int getPluginDuration();
+    int getPluginRepeat();
     void createEvent(String title,LocalDate startDate, LocalTime startTime, int duration);
     void createEvent(String title,LocalDate startDate);
     Locale getLocale();

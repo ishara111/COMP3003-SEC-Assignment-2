@@ -2,32 +2,52 @@ event 2023-10-23 15:00:36 2 "Meeting 1"
 event 2023-10-25 08:30:45 3 "Meeting 2"
 
 event 2023-10-26
-    all-day "Christmas Day"
+    all-day "all day"
 
 plugin edu.curtin.calplugins.Repeat {
-title: "plugin allday",
-
+title: "repeat",
 startDate: "2023-10-23",
+repeat: "2",
 startTime: "18:30:45",
 duration: "2"
-
 }
 
 plugin edu.curtin.calplugins.Repeat{
-title: "plugin notify test",
-
-startDate: "2023-10-23"
+title: "repeat allday ",
+startDate: "2023-10-28",
+repeat: "2"
 
 }
 
 plugin edu.curtin.calplugins.Notify{
 title: "plugin notify test"
 
-
 }
 
 script "
-# I'm a Python script!
-print(""hello world"")
+from datetime import datetime, timedelta
+
+def get_holidays_in_date_range(start_date, end_date):
+    holidays = []
+    current_date = start_date
+
+    while current_date <= end_date:
+        if current_date.weekday() == 5:  # Saturday
+            holidays.append(current_date.strftime(""%Y-%m-%d""))
+
+        current_date += timedelta(days=1)
+
+    return holidays
+
+# Input: Start and end date as datetime objects
+start_date = datetime(2023, 10, 23)
+end_date = datetime(2024, 10, 23)
+
+# Get the list of holidays in the specified date range
+holidays = get_holidays_in_date_range(start_date, end_date)
+
+# Print the list of holidays
+for holiday in holidays:
+    print(holiday)
 "
 

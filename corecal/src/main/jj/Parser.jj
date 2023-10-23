@@ -55,24 +55,15 @@ public class MyParser {
         private String startDate;
         private String startTime;
         private String duration;
+        private String repeat;
 
-        public Plugin(String className,String title, String startDate, String startTime, String duration) {
+        public Plugin(String className,String title, String startDate, String startTime, String duration,String repeat) {
             this.className = className;
             this.title = title;
             this.startDate = startDate;
             this.startTime = startTime;
             this.duration = duration;
-        }
-
-        public Plugin(String className,String title, String startDate) {
-            this.className = className;
-            this.title = title;
-            this.startDate = startDate;
-        }
-
-        public Plugin(String className, String title) {
-            this.className = className;
-            this.title = title;
+            this.repeat = repeat;
         }
 
         public String getClassName() {
@@ -93,6 +84,10 @@ public class MyParser {
 
         public String getTitle() {
             return title;
+        }
+        public String getRepeat()
+        {
+            return repeat;
         }
     }
 
@@ -224,12 +219,14 @@ void plugins() throws ParseException:
     String date = "";
     String time = "";
     String duration = "";
+    String repeat = "";
 
     Token nameToken= null;
     Token titleToken= null;
     Token dateToken = null;
     Token timeToken = null;
     Token durationToken = null;
+    Token repeatToken = null;
 
 }
 {
@@ -241,6 +238,7 @@ void plugins() throws ParseException:
                "title:" titleToken=<TEXT> { title = titleToken.image; }
                 (
                    "," "startDate:" dateToken=<TEXT> { date = dateToken.image; }
+                   "," "repeat:" repeatToken=<TEXT> { repeat = repeatToken.image; }
                    (
                        "," "startTime:" timeToken=<TEXT> { time = timeToken.image; }
                        "," "duration:" durationToken=<TEXT> { duration = durationToken.image; }
@@ -258,7 +256,8 @@ void plugins() throws ParseException:
           date = date.replace("\"", "");
           time = time.replace("\"", "");
           duration = duration.replace("\"", "");
-            plugins.add(new Plugin(name,title,date,time,duration));
+          repeat = repeat.replace("\"", "");
+            plugins.add(new Plugin(name,title,date,time,duration,repeat));
           }
 
 

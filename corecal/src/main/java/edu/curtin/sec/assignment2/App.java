@@ -129,16 +129,17 @@ public class App
                 if (!((MyParser.Plugin) plugin).getStartDate().isEmpty())
                 {
                     LocalDate date = convertDate(((MyParser.Plugin) plugin).getStartDate());
+                    int repeat = Integer.parseInt(((MyParser.Plugin) plugin).getRepeat());
 
                     if(!((MyParser.Plugin) plugin).getStartTime().isEmpty())
                     {
                         LocalTime time = converTime(((MyParser.Plugin) plugin).getStartTime());
                         int duration = Integer.parseInt(((MyParser.Plugin) plugin).getDuration());
 
-                        plugins.add(new Plugin(className,title,date,time,duration));
+                        plugins.add(new Plugin(className,title,date,time,duration,repeat));
                     }
                     else {
-                        plugins.add(new Plugin(className,title,date));
+                        plugins.add(new Plugin(className,title,date,repeat));
                     }
                 }
                 else {

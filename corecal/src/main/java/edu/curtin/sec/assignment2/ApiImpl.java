@@ -43,6 +43,11 @@ public class ApiImpl implements CalendarAPIData {
     }
 
     @Override
+    public int getPluginRepeat() {
+        return plugin.getRepeat();
+    }
+
+    @Override
     public void createEvent(String title, LocalDate startDate, LocalTime startTime, int duration) {
         app.events.add(new Event(title,startDate,startTime,duration));
     }
