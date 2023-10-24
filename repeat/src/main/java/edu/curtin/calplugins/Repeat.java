@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: Repeat - plugin that will create events every N days specified by repeat arg for a year
+ */
 package edu.curtin.calplugins;
 
 import edu.curtin.sec.api.*;
@@ -8,9 +14,9 @@ import java.util.Map;
 
 public class Repeat implements CalendarAPI {
     @Override
-    public void startPlugin(CalendarAPIData api) {
+    public void startPlugin(CalendarAPIData api) { //plugin that will create events every N days specified by repeat arg for a year
 
-        if (api.getPluginStartTime()!=null)
+        if (api.getPluginStartTime()!=null) // for events with time
         {
             api.createEvent(api.getPluginTitle(),api.getPluginStartDate(),api.getPluginStartTime(),api.getPluginDuration());
 
@@ -23,7 +29,7 @@ public class Repeat implements CalendarAPI {
                 api.createEvent(api.getPluginTitle(),date,api.getPluginStartTime(),api.getPluginDuration());
             }
         }
-        else {
+        else { // for all day events
             api.createEvent(api.getPluginTitle(),api.getPluginStartDate());
 
             LocalDate date = api.getPluginStartDate();

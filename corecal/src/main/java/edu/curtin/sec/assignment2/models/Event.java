@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: Event - model class used to save details of events
+ */
 package edu.curtin.sec.assignment2.models;
 
 import java.time.LocalDate;

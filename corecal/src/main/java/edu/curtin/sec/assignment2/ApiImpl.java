@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: ApiImpl - CalndarAPIData implementation class
+ */
 package edu.curtin.sec.assignment2;
 
 import edu.curtin.sec.api.CalendarAPIData;

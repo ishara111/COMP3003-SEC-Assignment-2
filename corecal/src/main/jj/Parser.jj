@@ -1,20 +1,20 @@
 options {
-    IGNORE_CASE=true;
+    IGNORE_CASE=true; // this will make sure that case-sensitivity is not taken into account
     }
 PARSER_BEGIN(MyParser)
 
-// Needed for the array list class
 package edu.curtin.sec.assignment2;
 import java.util.*;
 
 public class MyParser {
+
+    // event class
     static class Event {
         public String title;
         public String startDate;
         public String startTime;
         public String duration;
 
-        //private boolean notified;
 
         public Event(String title,String startDate, String startTime, String duration) {
             this.title = title;
@@ -49,6 +49,7 @@ public class MyParser {
         }
     }
 
+    // plugin class
     static class Plugin {
         private String className;
         private String title;
@@ -91,30 +92,29 @@ public class MyParser {
         }
     }
 
-    public static ArrayList events = new ArrayList();
+    public static ArrayList events = new ArrayList(); // lists that are used to store events plugins and scripts
     public static ArrayList plugins = new ArrayList();
     public static ArrayList scripts = new ArrayList();
 
-     public static ArrayList getEvents()
+     public static ArrayList getEvents() //returns all parsed events
      {
          return events;
      }
 
-     public static ArrayList getScripts()
+     public static ArrayList getScripts() //returns all parsed scripts
      {
          return scripts;
      }
-     public static ArrayList getPlugins()
+     public static ArrayList getPlugins() //returns all parsed plugins
      {
          return plugins;
      }
 
 
 }
-
-
 PARSER_END(MyParser)
 
+// these tokens will be skipped while parsing
 SKIP:
 {
     " " |
@@ -123,6 +123,7 @@ SKIP:
     "\t"
 }
 
+// below are all the tokens that will be used to parse
 TOKEN :
 {
     <EVENT : "event">
@@ -143,22 +144,22 @@ void parse():
 {
 }
 {
-    // File ends with EOF
+    // parses until file ends
     start() <EOF>
 }
 
-// Recognises a list of places or a list of places relative to each other
+
 void start() throws ParseException:
 {
 }
 {
-    (   // Either were entering a list of things we see, or a list of things we see with respect to some other thing
+    (   // Either going to find events plugins or scripts
         events() | plugins() | scripts()
 
 
-    )* // You can have as many lines of this input as you like
+    )* // there can be a lot of each type
 }
-
+// parses all evets
 void events() throws ParseException:
 {
     String date= "";
@@ -174,7 +175,7 @@ void events() throws ParseException:
 {
 
     try {
-            // This bit has to always be at the start
+
               ( <EVENT>
               dateToken=<DATE>{ date = dateToken.image; }
               (
@@ -186,13 +187,7 @@ void events() throws ParseException:
               )
               titleToken=<TEXT> { title = titleToken.image; }
               )
-//              timeToken=<TIME>{ time += " " + timeToken.image; }
-//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
-//              |
-//
-//
-//
-//              )
+
               {
                 title = title.replace("\"", "");
                 date = date.replace("\"", "");
@@ -211,7 +206,7 @@ void events() throws ParseException:
     }
 }
 
-
+// parses all plugins
 void plugins() throws ParseException:
 {
     String name= "";
@@ -270,7 +265,7 @@ void plugins() throws ParseException:
     }
 }
 
-
+// parses all scrips
 void scripts() throws ParseException:
 {
     String script= "";
@@ -282,17 +277,11 @@ void scripts() throws ParseException:
 {
 
     try {
-            // This bit has to always be at the start
+
             (<SCRIPT>
             scriptToken=<TEXT> { script = scriptToken.image; }
             )
-//              timeToken=<TIME>{ time += " " + timeToken.image; }
-//              durationToken=<DURATION>{ duration += " " + durationToken.image; }
-//              |
-//
-//
-//
-//              )
+
               {
               script = script.substring(1);
               script = script.substring(1, script.length() - 1);

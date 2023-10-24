@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: App - main class of the application
+ */
 package edu.curtin.sec.assignment2;
 import edu.curtin.sec.assignment2.models.Event;
 import edu.curtin.sec.api.*;
@@ -11,47 +17,43 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * This illustrates different ways to use TerminalGrid. You may not feel you _need_ all the
- * different features shown here.
- */
 public class App
 {
-    public Locale locale = Locale.getDefault();
-    public ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale);
-    public LocalDate currentDate = LocalDate.now();
+    public Locale locale = Locale.getDefault(); //gets default locale
+    public ResourceBundle bundle = ResourceBundle.getBundle("bundle", locale); //creates resource bundle with locale
+    public LocalDate currentDate = LocalDate.now(); //gets the current date
 
-    public List<Event> events = new ArrayList<>();
+    public List<Event> events = new ArrayList<>();// lists to store events plugins and scripts
     public List<Plugin> plugins  = new ArrayList<>();
 
     public List<String> scripts = new ArrayList<>();
-    public static StringBuilder dslContent = new StringBuilder();
+    public static StringBuilder dslContent = new StringBuilder(); // the contents of the DSL file
 
 
     public static void main(String[] args) throws IOException {
 
-        checkInputFIle(args);
+        checkInputFIle(args); // checks if DSL file exists or a filename was provided
 
-        readFile(args);
+        readFile(args); //reads the file with correct utf encoding and stores it in dslcontent
 
-        App app = new App();
+        App app = new App(); // creates a new instanc of this class
 
-        app.parse();
+        app.parse(); // uses the javacc parser to parse through the contents of the DSL and add all parsed data into relevant lists
 
-        app.runScripts();
+        app.runScripts();// will run all parsed scripts
 
-        app.loadPlugins();
+        app.loadPlugins();// it will load all plugins using reflection API and start them
 
-        DisplayCalendar calendar = new DisplayCalendar(app);
+        DisplayCalendar calendar = new DisplayCalendar(app); // this is where the calendar is filled with events
 
-        Menu menu = new Menu(app,calendar);
+        Menu menu = new Menu(app,calendar); // this is where all control related stuff lives
 
-        menu.controlMenu();
+        menu.controlMenu(); // control the calendar
 
     }
     public List<ApiImpl> apiImpls = new ArrayList<>();
     public List<CalendarAPI> calendarAPIS = new ArrayList<>();
-    public void loadPlugins()
+    public void loadPlugins() // loads all plugins using relfection API and starts them
     {
         CalendarAPI calendarAPI;
         //notificationManager = new NotificationManager(this,)
@@ -77,7 +79,7 @@ public class App
         }
     }
 
-    public void notifyPlugins()
+    public void notifyPlugins() // when run it will notify all plugins
     {
         for (int i = 0; i < calendarAPIS.size(); i++) {
             //notifyPlugins.submit(new NotificationManager(this, apiImpls.get(i), appPlugins.get(i)));
@@ -85,7 +87,7 @@ public class App
         }
     }
 
-    public void runScripts()
+    public void runScripts() // will run all scripts with jython
     {
         //notificationManager = new NotificationManager(this,)
         for (String script: scripts) {
@@ -97,7 +99,7 @@ public class App
         }
     }
 
-    private void parse() {
+    private void parse() { // will parse dsl and add all data to relevant lists
         try {
             MyParser parser = new MyParser(new StringReader(dslContent.toString()));
             parser.parse();
@@ -173,7 +175,7 @@ public class App
 //        scripts.add("print(5+10)");
 //    }
 
-    private static void readFile(String[] args) throws IOException {
+    private static void readFile(String[] args) throws IOException { // reads the file in correct utf encoding
         String encoding;
 
         if(args[0].contains("utf8"))
@@ -209,7 +211,7 @@ public class App
         }
 
     }
-    private static void checkInputFIle(String[] args) throws FileNotFoundException {
+    private static void checkInputFIle(String[] args) throws FileNotFoundException { //checks the file
         System.out.print("\033[H\033[2J");
         if(args.length==0)
         {
@@ -226,7 +228,7 @@ public class App
         }
     }
 
-    public LocalDate convertDate(String date) {
+    public LocalDate convertDate(String date) { //converts string dates into LocalDate
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -240,7 +242,7 @@ public class App
         return null;
     }
 
-    public LocalTime converTime(String time) {
+    public LocalTime converTime(String time) {//converts string time into LocalTime
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         try {

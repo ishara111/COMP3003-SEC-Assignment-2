@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Interface: CalendarAPIData - interface that corecal will implement
+ */
 package edu.curtin.sec.api;
 
 

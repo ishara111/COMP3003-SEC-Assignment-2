@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: DisplayCalendar - class where displaying calendar and adding events to calendar is done
+ */
 package edu.curtin.sec.assignment2;
 
 import edu.curtin.sec.assignment2.models.Event;
@@ -17,7 +23,7 @@ public class DisplayCalendar {
         this.events = app.events;
     }
 
-    public void printCalendar(){
+    public void printCalendar(){ // prints the calendar using terminagrid when called
 
         var dates = new ArrayList<String>();
         var times = new ArrayList<String>();
@@ -70,7 +76,7 @@ public class DisplayCalendar {
 
         resetEvents(); //sets added to false again
 
-        if(times.isEmpty()==false)
+        if(times.isEmpty()==false)     //prints the calendat if there are no events it will not show caldndar
         {
             var terminalGrid = TerminalGrid.create();
             terminalGrid.print(eventMsgs, times, dates);
@@ -86,7 +92,7 @@ public class DisplayCalendar {
             System.out.println();
         }
     }
-    private boolean hasAllDayEventForSevenDays(List<String> dates)
+    private boolean hasAllDayEventForSevenDays(List<String> dates) // checks if allday slot needs to be shown for this week
     {
         for (String date:dates) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
@@ -100,7 +106,7 @@ public class DisplayCalendar {
         }
         return false;
     }
-    private boolean hasEventForSevenDays(String time,List<String> dates)
+    private boolean hasEventForSevenDays(String time,List<String> dates) //checks if time slot has to be shown for the current week
     {
         for (String date:dates) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
@@ -120,7 +126,7 @@ public class DisplayCalendar {
         }
         return false;
     }
-    private void resetEvents()
+    private void resetEvents() // will make added false after calendar is displayed (done to stop duplicates)
     {
         for (Event event:events) {
             event.setAdded(false);
@@ -128,7 +134,7 @@ public class DisplayCalendar {
         }
     }
 
-    private String getEvent(String time,String date)   //  SHOWS BOTH FOR ALLDAY AND TIME BOTH FIX BUG
+    private String getEvent(String time,String date) // retuens eevent for given time and date
     {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
