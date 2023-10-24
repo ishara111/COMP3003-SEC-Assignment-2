@@ -205,7 +205,7 @@ void events() throws ParseException:
     }
 
     catch(ParseException e) {
-        System.err.println("[PARSING ERROR] Event defined incorrectly");
+        System.err.println("\u001B[31m[DSL PARSING ERROR (EVENT)] Event Is Defined Incorrectly!!!\u001B[0m");
         System.err.println(e.getMessage());
         System.exit(0);
     }
@@ -264,7 +264,7 @@ void plugins() throws ParseException:
     }
 
     catch(ParseException e) {
-        System.err.println("[PARSING ERROR] Plugin defined incorrectly");
+        System.err.println("\u001B[31m[DSL PARSING ERROR (PLUGIN)] Plugin Is Defined Incorrectly!!!\u001B[0m");
         System.err.println(e.getMessage());
         System.exit(0);
     }
@@ -304,7 +304,7 @@ void scripts() throws ParseException:
     }
 
     catch(ParseException e) {
-        System.err.println("[PARSING ERROR] Script defined incorrectly");
+        System.err.println("\u001B[31m[DSL PARSING ERROR (SCRIPT)] Script Is Defined Incorrectly!!!\u001B[0m");
         System.err.println(e.getMessage());
         System.exit(0);
     }
