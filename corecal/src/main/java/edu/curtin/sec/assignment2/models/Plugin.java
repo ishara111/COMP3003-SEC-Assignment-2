@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: Plugin - model class used to store information about plugins
+ */
 package edu.curtin.sec.assignment2.models;
 
 import java.time.LocalDate;

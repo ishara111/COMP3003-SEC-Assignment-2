@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: Notify - plugin that will notify if title is same with whats in the notified event map
+ */
 package edu.curtin.calplugins;
 
 import edu.curtin.sec.api.*;
@@ -15,7 +21,7 @@ public class Notify implements CalendarAPI {
     }
 
     @Override
-    public void notifyPlugin(CalendarAPIData api, Map<String, List<Object>> data) {
+    public void notifyPlugin(CalendarAPIData api, Map<String, List<Object>> data) { // notifies if title is there in notified map
         //System.out.println(api.getPluginTitle());
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", api.getLocale());
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", api.getLocale());

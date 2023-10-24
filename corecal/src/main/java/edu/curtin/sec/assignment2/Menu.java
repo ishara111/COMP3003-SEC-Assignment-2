@@ -1,3 +1,10 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: Menu -  is the control menu of the application where everything related to control lives
+ *                also notifies all plugins each time menu is used
+ */
 package edu.curtin.sec.assignment2;
 
 import edu.curtin.sec.assignment2.models.Event;
@@ -26,11 +33,13 @@ public class Menu {
     {
         boolean stop = false;
         while (!stop) {
-            calendar.printCalendar();
+            calendar.printCalendar(); // prints calendar
             System.out.println();
-            app.notifyPlugins();
+
+            app.notifyPlugins();  // notifies all plugins
+
             System.out.println();
-            System.out.println(app.bundle.getString("menu-prompt"));
+            System.out.println(app.bundle.getString("menu-prompt")); //control menu begins
             System.out.println();
             option = scanner.nextLine();
             System.out.println();
@@ -38,58 +47,58 @@ public class Menu {
             switch (option) {
                 case "+d":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.plusDays(1);
+                    app.currentDate = app.currentDate.plusDays(1); // adds a day
                     break;
                 case "+w":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.plusWeeks(1);
+                    app.currentDate = app.currentDate.plusWeeks(1); // adds a week
                     break;
                 case "+m":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.plusMonths(1);
+                    app.currentDate = app.currentDate.plusMonths(1); // adds a month
                     break;
                 case "+y":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.plusYears(1);
+                    app.currentDate = app.currentDate.plusYears(1); //adds a year
                     break;
                 case "-d":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.minusDays(1);
+                    app.currentDate = app.currentDate.minusDays(1); // back a day
                     break;
                 case "-w":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.minusWeeks(1);
+                    app.currentDate = app.currentDate.minusWeeks(1); //back a week
                     break;
                 case "-m":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.minusMonths(1);
+                    app.currentDate = app.currentDate.minusMonths(1); //back a month
                     break;
                 case "-y":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = app.currentDate.minusYears(1);
+                    app.currentDate = app.currentDate.minusYears(1); //back a year
                     break;
                 case "t":
                     System.out.print("\033[H\033[2J");
-                    app.currentDate = LocalDate.now();
+                    app.currentDate = LocalDate.now(); // goes backk to current day
                     break;
                 case "s":
                     System.out.print("\033[H\033[2J");
                     System.out.println();
-                    search();
+                    search();           //runs the search method
                     System.out.println();
                     break;
                 case "q":
-                    System.out.print("\033[H\033[2J");
+                    System.out.print("\033[H\033[2J");  // quits the program
                     System.out.println("\u001B[32m"+app.bundle.getString("exit-program")+"\u001B[0m");
                     scanner.close();
                     stop=true;
                     break;
                 case "l":
                     System.out.print("\033[H\033[2J");
-                    changeLocale();
+                    changeLocale();   // runs the locale changing method
                     break;
                 case "h":
-                    System.out.println(app.bundle.getString("usage"));
+                    System.out.println(app.bundle.getString("usage")); //  shows the command usage
                     System.out.println();
                     System.out.println();
                     break;
@@ -103,7 +112,7 @@ public class Menu {
         }
     }
 
-    private boolean search()
+    private boolean search() // searches for events with only a year and shows it and moves calendar to it
     {
         System.out.println();
         System.out.println(app.bundle.getString("search-menu"));
@@ -145,7 +154,7 @@ public class Menu {
         return false;
     }
 
-    private void changeLocale()
+    private void changeLocale()//changes locale to whatever specified locale
     {
         boolean stop = false;
         while (!stop) {

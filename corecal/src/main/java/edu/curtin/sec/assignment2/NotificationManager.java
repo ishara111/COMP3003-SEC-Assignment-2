@@ -1,3 +1,9 @@
+/**
+ * Software Engineering Concepts COMP3003 - Assignment 2
+ * Name : Ishara Gomes
+ * ID : 20534521
+ * Class: NotificationManager - this notifies all plugin with a map of events that have current date and time
+ */
 package edu.curtin.sec.assignment2;
 
 import edu.curtin.sec.api.CalendarAPI;
@@ -22,49 +28,19 @@ public class NotificationManager{
         this.plugin = plugin;
     }
 
-    public void notifyPlugin() {
+    public void notifyPlugin() { // notifies the plugin wih the event map
         //sendEvents(getTodayEventTitles(app.currentDate));
         sendEvents(getTodayEventTitles());
 
     }
 
-//    public void registerPlugin(AppPlugin plugin) {
-//        plugins.add(plugin);
-//    }
 
-//    private Map<String, List<String>> getTodayEventTitles() {
-//
-//        Map<String, List<String>> todayEvents = new HashMap<>();
-//        LocalTime currentTime = LocalTime.now();
-//
-//        for (Event event : app.events) {                //CHANGE THE LIST OF STRING TO OBJECTS AND SEE IF THAT WORKS
-//            if (event.getStartDate().isEqual(LocalDate.now())) {
-//                List<String> data = new ArrayList<>();
-//                if (event.isAllDay()) {
-//                    data.add(event.getStartDate().toString());
-//                    data.add("all-day");
-//                    todayEvents.put(event.getTitle(), data);
-//                    //event.setNotified(true);
-//
-//                } else if (event.getStartTime().equals(currentTime)) {
-//                    data.add(event.getStartDate().toString());
-//                    data.add(event.getStartTime().toString());
-//                    data.add(Integer.toString(event.getDuration()));
-//                    todayEvents.put(event.getTitle(), data);
-//                    //event.setNotified(true);
-//
-//                }
-//            }
-//        }
-//
-//        return todayEvents;
-//    }
-    private Map<String, List<Object>> getTodayEventTitles() {
+    private Map<String, List<Object>> getTodayEventTitles() { // creates a map of events that have the current date and time
 
         Map<String, List<Object>> todayEvents = new HashMap<>();
         LocalTime currentTime = LocalTime.now();
 
-        for (Event event : app.events) {                //CHANGE THE LIST OF STRING TO OBJECTS AND SEE IF THAT WORKS
+        for (Event event : app.events) {
             if (event.getStartDate().isEqual(LocalDate.now())) {
                 List<Object> data = new ArrayList<>();
                 if (event.isAllDay()) {
@@ -86,13 +62,6 @@ public class NotificationManager{
 
         return todayEvents;
     }
-
-
-//    public void sendEvents(List<String> titles) {
-//        for (AppPlugin plugin : plugins) {
-//            plugin.notifyPlugin(apiImpl,titles);
-//        }
-//    }
 
     public void sendEvents(Map<String, List<Object>> data) {
         plugin.notifyPlugin(apiImpl,data);
