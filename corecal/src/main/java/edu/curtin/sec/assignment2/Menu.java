@@ -15,7 +15,7 @@ public class Menu {
     private DisplayCalendar calendar;
     private static App app;
 
-    public Menu(App app,Scanner scanner,DisplayCalendar calendar) {
+    public Menu(App app,DisplayCalendar calendar) {
         this.option = "";
         this.scanner = new Scanner(System.in);
         this.calendar = calendar;
@@ -24,7 +24,8 @@ public class Menu {
 
     public void controlMenu()
     {
-        while (true) {
+        boolean stop = false;
+        while (!stop) {
             calendar.printCalendar();
             System.out.println();
             app.notifyPlugins();
@@ -81,7 +82,8 @@ public class Menu {
                     System.out.print("\033[H\033[2J");
                     System.out.println("\u001B[32m"+app.bundle.getString("exit-program")+"\u001B[0m");
                     scanner.close();
-                    System.exit(0);
+                    stop=true;
+                    break;
                 case "l":
                     System.out.print("\033[H\033[2J");
                     changeLocale();

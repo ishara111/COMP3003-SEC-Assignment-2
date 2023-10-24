@@ -2,10 +2,10 @@ package edu.curtin.sec.assignment2;
 import edu.curtin.sec.assignment2.models.Event;
 import edu.curtin.sec.api.*;
 import edu.curtin.sec.assignment2.models.Plugin;
-import org.python.modules._systemrestart;
 
 import java.io.*;
 import java.nio.charset.CharacterCodingException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +28,7 @@ public class App
     public static StringBuilder dslContent = new StringBuilder();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         checkInputFIle(args);
 
@@ -42,21 +42,18 @@ public class App
 
         app.loadPlugins();
 
-        Scanner scanner = new Scanner(System.in);
-
         DisplayCalendar calendar = new DisplayCalendar(app);
 
-        Menu menu = new Menu(app,scanner,calendar);
+        Menu menu = new Menu(app,calendar);
 
         menu.controlMenu();
 
-
     }
-    List<ApiImpl> apiImpls = new ArrayList<>();
-    List<CalendarAPI> calendarAPIS = new ArrayList<>();
+    public List<ApiImpl> apiImpls = new ArrayList<>();
+    public List<CalendarAPI> calendarAPIS = new ArrayList<>();
     public void loadPlugins()
     {
-        CalendarAPI calendarAPI = null;
+        CalendarAPI calendarAPI;
         //notificationManager = new NotificationManager(this,)
 
         for (Plugin plugin: plugins) {
@@ -100,8 +97,7 @@ public class App
         }
     }
 
-    private void parse()
-    {
+    private void parse() {
         try {
             MyParser parser = new MyParser(new StringReader(dslContent.toString()));
             parser.parse();
@@ -110,7 +106,7 @@ public class App
 
                 String title = ((MyParser.Event) event).getTitle();
                 LocalDate date = convertDate(((MyParser.Event) event).getStartDate());
-                if(!((MyParser.Event) event).getStartTime().isEmpty())
+                if(((MyParser.Event) event).getStartTime().isEmpty()==false)
                 {
                     LocalTime time = converTime(((MyParser.Event) event).getStartTime());
                     int duration = Integer.parseInt(((MyParser.Event) event).getDuration());
@@ -126,12 +122,12 @@ public class App
 
                 String className = ((MyParser.Plugin) plugin).getClassName();
                 String title = ((MyParser.Plugin) plugin).getTitle();
-                if (!((MyParser.Plugin) plugin).getStartDate().isEmpty())
+                if (((MyParser.Plugin) plugin).getStartDate().isEmpty()==false)
                 {
                     LocalDate date = convertDate(((MyParser.Plugin) plugin).getStartDate());
                     int repeat = Integer.parseInt(((MyParser.Plugin) plugin).getRepeat());
 
-                    if(!((MyParser.Plugin) plugin).getStartTime().isEmpty())
+                    if(((MyParser.Plugin) plugin).getStartTime().isEmpty()==false)
                     {
                         LocalTime time = converTime(((MyParser.Plugin) plugin).getStartTime());
                         int duration = Integer.parseInt(((MyParser.Plugin) plugin).getDuration());
@@ -154,8 +150,8 @@ public class App
                 scripts.add(scriptText);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("parse failed",e);
         }
     }
 //    private void loadTestStuff()
@@ -177,8 +173,7 @@ public class App
 //        scripts.add("print(5+10)");
 //    }
 
-    private static void readFile(String[] args)
-    {
+    private static void readFile(String[] args) throws IOException {
         String encoding;
 
         if(args[0].contains("utf8"))
@@ -207,31 +202,27 @@ public class App
             }
         } catch (CharacterCodingException e) {
             // Handle CharacterCodingException
-            e.printStackTrace();
+            throw new IllegalArgumentException("encode failiure ",e);
         } catch (IOException e) {
             // Handle IOException
-            e.printStackTrace();
+            throw new IOException("file reading failed ",e);
         }
 
     }
-    private static void checkInputFIle(String[] args)
-    {
+    private static void checkInputFIle(String[] args) throws FileNotFoundException {
         System.out.print("\033[H\033[2J");
         if(args.length==0)
         {
-            System.out.println("Input File Not Provided");
-            System.exit(0);
+            throw new IllegalArgumentException("Input File Not Provided");
         }
         if(args.length>1)
         {
-            System.out.println("Program Only Takes One Argument");
-            System.exit(0);
+            throw new IllegalArgumentException("Program Only Takes One Argument");
         }
         File file = new File(args[0]);
 
         if (!file.exists()) {
-            System.out.println("Input File Does Not Exist");
-            System.exit(0);
+            throw new FileNotFoundException("Input File Does Not Exist");
         }
     }
 
@@ -243,7 +234,7 @@ public class App
 
             return LocalDate.parse(date, formatter);
 
-        } catch (Exception e) {
+        } catch (DateTimeException e) {
             System.out.println("Unable to parse the date: " + e.getMessage());
         }
         return null;
@@ -256,7 +247,7 @@ public class App
 
             return LocalTime.parse(time, formatter);
 
-        } catch (Exception e) {
+        } catch (DateTimeException  e) {
 
             System.out.println("Unable to parse the time: " + e.getMessage());
         }

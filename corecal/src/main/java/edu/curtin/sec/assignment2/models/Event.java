@@ -15,7 +15,6 @@ public class Event {
     private boolean allDay;
     private boolean added;
     //private boolean notified;
-    private DateTimeFormatter timeFormatter;
 
     public Event(String title,LocalDate startDate, LocalTime startTime, int duration) {
         this.title = title;
@@ -50,7 +49,7 @@ public class Event {
     }
 
     public void createText(Locale locale, ResourceBundle bundle) {
-        this.timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
         this.text = this.startTime.format(timeFormatter)+" "+this.duration+" "+bundle.getString("mins")+" "+this.title;
     }
     public String getText() {
