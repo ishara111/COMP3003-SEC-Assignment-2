@@ -114,7 +114,7 @@ public class Menu {
         while(date.isBefore(app.currentDate.plusYears(1)))
         {
             for (Event event:app.events) {
-                if(event.getTitle().contains(input) && date.equals(event.getStartDate()))
+                if(event.getTitle().toLowerCase().contains(input.toLowerCase()) && date.equals(event.getStartDate()))
                 {
                     System.out.println("\u001B[32m"+app.bundle.getString("search-found")+"\u001B[0m");
 
