@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Event {
     private String title;
@@ -48,9 +49,9 @@ public class Event {
         return startTime;
     }
 
-    public void createText(Locale locale) {
+    public void createText(Locale locale, ResourceBundle bundle) {
         this.timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
-        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" mins "+this.title;
+        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" "+bundle.getString("mins")+" "+this.title;
     }
     public String getText() {
 

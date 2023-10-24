@@ -141,7 +141,7 @@ public class DisplayCalendar {
                 if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date) && !event.isAdded())
                 {
                     event.setAdded(true);
-                    event.createText(app.locale);
+                    event.createText(app.locale,app.bundle);
                     return event.getText();
                 }
             }
