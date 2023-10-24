@@ -15,7 +15,7 @@ public class Menu {
     private DisplayCalendar calendar;
     private static App app;
 
-    public Menu(App app,Scanner scanner,DisplayCalendar calendar) {
+    public Menu(App app,DisplayCalendar calendar) {
         this.option = "";
         this.scanner = new Scanner(System.in);
         this.calendar = calendar;
@@ -24,7 +24,8 @@ public class Menu {
 
     public void controlMenu()
     {
-        while (true) {
+        boolean stop = false;
+        while (!stop) {
             calendar.printCalendar();
             System.out.println();
             app.notifyPlugins();
@@ -71,29 +72,30 @@ public class Menu {
                     System.out.print("\033[H\033[2J");
                     app.currentDate = LocalDate.now();
                     break;
-                case "search":
+                case "s":
                     System.out.print("\033[H\033[2J");
                     System.out.println();
                     search();
                     System.out.println();
                     break;
-                case "quit":
+                case "q":
                     System.out.print("\033[H\033[2J");
-                    System.out.println(app.bundle.getString("exit-program"));
+                    System.out.println("\u001B[32m"+app.bundle.getString("exit-program")+"\u001B[0m");
                     scanner.close();
-                    System.exit(0);
-                case "locale":
+                    stop=true;
+                    break;
+                case "l":
                     System.out.print("\033[H\033[2J");
                     changeLocale();
                     break;
-                case "help":
+                case "h":
                     System.out.println(app.bundle.getString("usage"));
                     System.out.println();
                     System.out.println();
                     break;
                 default:
                     System.out.print("\033[H\033[2J");
-                    System.out.println(app.bundle.getString("invalid-option"));
+                    System.out.println("\u001B[31m"+app.bundle.getString("invalid-option")+"\u001B[0m");
                     System.out.println();
                     break;
 
@@ -114,9 +116,9 @@ public class Menu {
         while(date.isBefore(app.currentDate.plusYears(1)))
         {
             for (Event event:app.events) {
-                if(event.getTitle().contains(input) && date.equals(event.getStartDate()))
+                if(event.getTitle().toLowerCase().contains(input.toLowerCase()) && date.equals(event.getStartDate()))
                 {
-                    System.out.println(app.bundle.getString("search-found"));
+                    System.out.println("\u001B[32m"+app.bundle.getString("search-found")+"\u001B[0m");
 
                     app.currentDate = event.getStartDate();
 
@@ -139,7 +141,7 @@ public class Menu {
             }
             date = date.plusDays(1);
         }
-        System.out.println(app.bundle.getString("search-not-found"));
+        System.out.println("\u001B[33m"+app.bundle.getString("search-not-found")+"\u001B[0m");
         return false;
     }
 
@@ -157,20 +159,6 @@ public class Menu {
 
             if (matcher.matches()) {
                 switch (input) {
-//                    case "en-AU":
-//                        app.locale = Locale.forLanguageTag("en-AU");
-//                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
-//                        stop=true;
-//                        System.out.println("\nSelected English (Australia) Locale");
-//                        System.out.print("\033[H\033[2J");
-//                        break;
-//                    case "si-LK":
-//                        app.locale = Locale.forLanguageTag("si-LK");
-//                        app.bundle = ResourceBundle.getBundle("bundle", app.locale);
-//                        stop=true;
-//                        System.out.println("\nSelected Sinhalese (Sri Lanka) Locale");
-//                        System.out.print("\033[H\033[2J");
-//                        break;
                     case "de-DE":
                         app.locale = Locale.forLanguageTag("de-DE");
                         app.bundle = ResourceBundle.getBundle("bundle", app.locale);
@@ -190,7 +178,7 @@ public class Menu {
 
             } else {
                 System.out.println();
-                System.out.println(app.bundle.getString("invalid-locale"));
+                System.out.println("\u001B[31m"+app.bundle.getString("invalid-locale")+"\u001B[0m");
             }
 
         }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Event {
     private String title;
@@ -14,7 +15,6 @@ public class Event {
     private boolean allDay;
     private boolean added;
     //private boolean notified;
-    private DateTimeFormatter timeFormatter;
 
     public Event(String title,LocalDate startDate, LocalTime startTime, int duration) {
         this.title = title;
@@ -48,9 +48,9 @@ public class Event {
         return startTime;
     }
 
-    public void createText(Locale locale) {
-        this.timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
-        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" mins "+this.title;
+    public void createText(Locale locale, ResourceBundle bundle) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a", locale);
+        this.text = this.startTime.format(timeFormatter)+" "+this.duration+" "+bundle.getString("mins")+" "+this.title;
     }
     public String getText() {
 

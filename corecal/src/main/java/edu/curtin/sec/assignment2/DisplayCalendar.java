@@ -36,7 +36,7 @@ public class DisplayCalendar {
         }
 
         LocalTime startTime = LocalTime.of(0, 0); // Start at 12 AM
-        LocalTime endTime = LocalTime.of(23, 59); // Ending time (11:59 PM)
+//        LocalTime endTime = LocalTime.of(23, 59); // Ending time (11:59 PM)
         LocalTime stopTime = LocalTime.of(23, 0); // Ending time (11:00 PM)
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
@@ -49,7 +49,7 @@ public class DisplayCalendar {
             {
                 times.add(rowText);
             }
-            if(startTime==stopTime)
+            if(startTime.equals(stopTime))
             {
                 stop = true;
             }
@@ -70,7 +70,7 @@ public class DisplayCalendar {
 
         resetEvents(); //sets added to false again
 
-        if(!times.isEmpty())
+        if(times.isEmpty()==false)
         {
             var terminalGrid = TerminalGrid.create();
             terminalGrid.print(eventMsgs, times, dates);
@@ -133,7 +133,7 @@ public class DisplayCalendar {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy", app.locale);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh a", app.locale);
         for (Event event:events) {
-            if(!event.isAllDay())
+            if(event.isAllDay()==false)
             {
                 LocalTime nextHour = event.getStartTime().plusHours(1);
                 String formatString = event.getStartTime().format(timeFormatter) + " - " + nextHour.format(timeFormatter);
@@ -141,7 +141,7 @@ public class DisplayCalendar {
                 if (formatString.equals(time) && dtf.format(event.getStartDate()).equals(date) && !event.isAdded())
                 {
                     event.setAdded(true);
-                    event.createText(app.locale);
+                    event.createText(app.locale,app.bundle);
                     return event.getText();
                 }
             }
