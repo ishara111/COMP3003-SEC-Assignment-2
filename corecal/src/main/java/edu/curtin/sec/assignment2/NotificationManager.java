@@ -2,7 +2,8 @@
  * Software Engineering Concepts COMP3003 - Assignment 2
  * Name : Ishara Gomes
  * ID : 20534521
- * Class: NotificationManager - this notifies all plugins with a map of events that have current date and time for startdate and or >= starttime
+ * Class: NotificationManager - this notifies plugin with a map of events that have current date startdate and or current time that has passed starttime
+ *                              (time is not compared for all-day events)
  */
 package edu.curtin.sec.assignment2;
 
@@ -35,8 +36,8 @@ public class NotificationManager{
     }
 
 
-    private Map<String, List<Object>> getTodayEventTitles() { // creates a map of events that have current date and time for startdate and or >= starttime
-
+    private Map<String, List<Object>> getTodayEventTitles() { // creates a map of events that have current date startdate and current time that has passed starttime
+                                                              // time is not compared for all-day events
         Map<String, List<Object>> todayEvents = new HashMap<>();
         LocalTime currentTime = LocalTime.now();
 
@@ -49,7 +50,7 @@ public class NotificationManager{
                     todayEvents.put(event.getTitle(), data);
                     //event.setNotified(true);
 
-                } else if (event.getStartTime().isBefore(currentTime)) { // for normal events checks if startime is after current time
+                } else if (event.getStartTime().isBefore(currentTime)) { // for normal events checks if current time has passed starttime
                     data.add(event.getStartDate());
                     data.add(event.getStartTime());
                     data.add(event.getDuration());
